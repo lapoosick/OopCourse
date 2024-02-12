@@ -2,16 +2,17 @@ package ru.academits.orlov.range_main;
 
 import ru.academits.orlov.range.Range;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Введите начало диапазона: ");
+        System.out.print("Введите начало интервала: ");
         double from = scanner.nextDouble();
 
-        System.out.print("Введите конец диапазона: ");
+        System.out.print("Введите конец интервала: ");
         double to = scanner.nextDouble();
 
         System.out.print("Введите число для проверки: ");
@@ -19,61 +20,45 @@ public class Main {
 
         Range range = new Range(from, to);
 
-        System.out.printf("Длина диапазона равна: %f.%n", range.getLength());
-        System.out.println(range.isInside(number) ? "Ваше число в диапазоне." : "Ваше число вне диапазона.");
+        System.out.printf("Длина интервала равна: %f.%n", range.getLength());
+        System.out.println(range.isInside(number) ? "Ваше число в интервале." : "Ваше число вне интервала.");
 
         range.setFrom(1.6574);
         range.setTo(6.28749);
 
-        System.out.printf("Новые границы диапазона: %f и %f.%n", range.getFrom(), range.getTo());
-        System.out.printf("Новая длина диапазона: %f.", range.getLength());
+        System.out.printf("Новые границы интервала: %f и %f.%n", range.getFrom(), range.getTo());
+        System.out.printf("Новая длина интервала: %f.", range.getLength());
         System.out.println();
 
         System.out.print("Укажите начало первого интервала: ");
-        double fromA = scanner.nextDouble();
+        double from1 = scanner.nextDouble();
 
         System.out.print("Укажите конец первого интервала: ");
-        double toA = scanner.nextDouble();
+        double to1 = scanner.nextDouble();
 
         System.out.print("Укажите начало второго интервала: ");
-        double fromB = scanner.nextDouble();
+        double from2 = scanner.nextDouble();
 
         System.out.print("Укажите конец второго интервала: ");
-        double toB = scanner.nextDouble();
+        double to2 = scanner.nextDouble();
 
-        Range rangeA = new Range(fromA, toA);
-        Range rangeB = new Range(fromB, toB);
+        Range range1 = new Range(from1, to1);
+        Range range2 = new Range(from2, to2);
 
-        Range rangesIntersection = rangeA.getRangesIntersection(rangeB);
+        Range intersection = range1.getIntersection(range2);
 
-        if (rangesIntersection == null) {
+        if (intersection == null) {
             System.out.println("Интервалы не пересекаются.");
         } else {
-            System.out.println("Интервал-пересечение: (" + rangesIntersection.getFrom() + ", " + rangesIntersection.getTo() + ")");
+            System.out.println("Интервал-пересечение: " + intersection);
         }
 
-        Range[] rangesUnion = rangeA.getRangesUnion(rangeB);
+        Range[] union = range1.getUnion(range2);
 
-        System.out.print("Результат объединения двух интервалов: (" + rangesUnion[0].getFrom() + ", " + rangesUnion[0].getTo() + ")");
+        System.out.println("Результат объединения двух интервалов: " + Arrays.toString(union));
 
-        if (rangesUnion.length > 1) {
-            System.out.println(" + (" + rangesUnion[1].getFrom() + ", " + rangesUnion[1].getTo() + ")");
-        } else {
-            System.out.println();
-        }
+        Range[] difference = range1.getDifference(range2);
 
-        Range[] rangeSubtraction = rangeA.getRangesSubtraction(rangeB);
-
-        if (rangeSubtraction == null) {
-            System.out.println("Разностью двух интервалов является пустое множество.");
-
-            return;
-        }
-
-        System.out.print("Разность двух интервалов: (" + rangeSubtraction[0].getFrom() + ", " + rangeSubtraction[0].getTo() + ")");
-
-        if (rangeSubtraction.length > 1) {
-            System.out.println(" + (" + rangeSubtraction[1].getFrom() + ", " + rangeSubtraction[1].getTo() + ")");
-        }
+        System.out.println("Разность двух интервалов: " + Arrays.toString(difference));
     }
 }
