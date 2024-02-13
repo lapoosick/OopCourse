@@ -37,40 +37,40 @@ public class Main {
         System.out.println("Прибавление:");
 
         System.out.println(vector1 + " + " + vector2);
-        vector1.addVector(vector2);
+        vector1.add(vector2);
         System.out.println("Результат: " + vector1);
         System.out.println();
 
         System.out.println(vector2 + " + " + vector4);
-        vector2.addVector(vector4);
+        vector2.add(vector4);
         System.out.println("Результат: " + vector2);
         System.out.println();
 
         System.out.println(vector2 + " + " + vector2);
-        vector2.addVector(vector2);
+        vector2.add(vector2);
         System.out.println("Результат: " + vector2);
         System.out.println();
 
         System.out.println("Вычитание:");
 
         System.out.println(vector1 + " - " + vector3);
-        vector1.subtractVector(vector3);
+        vector1.subtract(vector3);
         System.out.println("Результат: " + vector1);
         System.out.println();
 
         System.out.println(vector3 + " - " + vector4);
-        vector3.subtractVector(vector4);
+        vector3.subtract(vector4);
         System.out.println("Результат: " + vector3);
         System.out.println();
 
         System.out.println(vector3 + " - " + vector3);
-        vector3.subtractVector(vector3);
+        vector3.subtract(vector3);
         System.out.println("Результат: " + vector3);
         System.out.println();
 
         System.out.println("Умножение на скаляр:");
         System.out.println(vector4 + " * 2");
-        vector4.multiplyByScalar(2);
+        vector4.multiply(2);
         System.out.println("Результат: " + vector4);
         System.out.println();
 
@@ -91,7 +91,8 @@ public class Main {
         System.out.println("Результат: " + vector4);
         System.out.println();
 
-        Vector vector5 = new Vector(new double[]{24, 48.8, 72.6, 8.8});
+        Vector vector5 = new Vector(new double[]{24, 48.4, 82, 8.8});
+
         System.out.println("vector1.equals(vector2): " + vector1.equals(vector2));
         System.out.println("vector2.equals(vector1): " + vector2.equals(vector1));
         System.out.println("vector2.equals(vector5): " + vector2.equals(vector5));
@@ -104,22 +105,22 @@ public class Main {
 
         System.out.println("Статические методы.");
         System.out.println("Сложение:");
-        System.out.println(vector2 + " + " + vector4 + " = " + Vector.addVectors(vector2, vector4));
-        System.out.println(vector4 + " + " + vector2 + " = " + Vector.addVectors(vector4, vector2));
-        System.out.println(vector1 + " + " + vector3 + " = " + Vector.addVectors(vector1, vector3));
-        System.out.println(vector3 + " + " + vector1 + " = " + Vector.addVectors(vector3, vector1));
+        System.out.println(vector2 + " + " + vector4 + " = " + Vector.getSum(vector2, vector4));
+        System.out.println(vector4 + " + " + vector2 + " = " + Vector.getSum(vector4, vector2));
+        System.out.println(vector1 + " + " + vector3 + " = " + Vector.getSum(vector1, vector3));
+        System.out.println(vector3 + " + " + vector1 + " = " + Vector.getSum(vector3, vector1));
         System.out.println();
 
         System.out.println("Вычитание:");
-        System.out.println(vector2 + " - " + vector4 + " = " + Vector.subtractVectors(vector2, vector4));
-        System.out.println(vector4 + " - " + vector2 + " = " + Vector.subtractVectors(vector4, vector2));
-        System.out.println(vector1 + " - " + vector3 + " = " + Vector.subtractVectors(vector1, vector3));
-        System.out.println(vector3 + " - " + vector1 + " = " + Vector.subtractVectors(vector3, vector1));
+        System.out.println(vector2 + " - " + vector4 + " = " + Vector.getDifference(vector2, vector4));
+        System.out.println(vector4 + " - " + vector2 + " = " + Vector.getDifference(vector4, vector2));
+        System.out.println(vector1 + " - " + vector3 + " = " + Vector.getDifference(vector1, vector3));
+        System.out.println(vector3 + " - " + vector1 + " = " + Vector.getDifference(vector3, vector1));
         System.out.println();
 
         System.out.println("Скалярное произведение:");
-        System.out.println(vector1 + " * " + vector2 + " = " + Vector.multiplyVectors(vector1, vector2));
-        System.out.println(vector2 + " * " + vector1 + " = " + Vector.multiplyVectors(vector2, vector1));
-        System.out.println(vector4 + " * " + vector4 + " = " + Vector.multiplyVectors(vector4, vector4));
+        System.out.println(vector1 + " * " + vector2 + " = " + Vector.multiply(vector1, vector2));
+        System.out.println(vector2 + " * " + vector1 + " = " + Vector.multiply(vector2, vector1));
+        System.out.println(vector4 + " * " + vector4 + " = " + Vector.multiply(vector4, vector4));
     }
 }
