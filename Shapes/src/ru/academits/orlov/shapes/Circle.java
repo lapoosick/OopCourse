@@ -4,8 +4,8 @@ public class Circle implements Shape {
     private final double radius;
 
     public Circle(double radius) {
-        if (radius < 0) {
-            throw new IllegalArgumentException("Радиус не должен быть < 0");
+        if (radius <= 0) {
+            throw new IllegalArgumentException("Радиус не должен быть <= 0");
         }
 
         this.radius = radius;
@@ -42,8 +42,13 @@ public class Circle implements Shape {
 
     @Override
     public boolean equals(Object o) {
-        if (o == this) return true;
-        if (o == null || o.getClass() != getClass()) return false;
+        if (o == this) {
+            return true;
+        }
+
+        if (o == null || o.getClass() != getClass()) {
+            return false;
+        }
 
         Circle c = (Circle) o;
 

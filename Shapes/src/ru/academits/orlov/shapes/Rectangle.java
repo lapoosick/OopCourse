@@ -5,12 +5,12 @@ public class Rectangle implements Shape {
     private final double height;
 
     public Rectangle(double width, double height) {
-        if (width < 0) {
-            throw new IllegalArgumentException("Ширина прямоугольника не должна быть < 0");
+        if (width <= 0) {
+            throw new IllegalArgumentException("Ширина прямоугольника не должна быть <= 0");
         }
 
-        if (height < 0) {
-            throw new IllegalArgumentException("Высота прямоугольника не должна быть < 0");
+        if (height <= 0) {
+            throw new IllegalArgumentException("Высота прямоугольника не должна быть <= 0");
         }
 
         this.width = width;
@@ -34,7 +34,7 @@ public class Rectangle implements Shape {
 
     @Override
     public double getPerimeter() {
-        return width * 2 + height * 2;
+        return (width + height) * 2;
     }
 
     @Override
@@ -48,8 +48,13 @@ public class Rectangle implements Shape {
 
     @Override
     public boolean equals(Object o) {
-        if (o == this) return true;
-        if (o == null || o.getClass() != getClass()) return false;
+        if (o == this) {
+            return true;
+        }
+
+        if (o == null || o.getClass() != getClass()) {
+            return false;
+        }
 
         Rectangle r = (Rectangle) o;
 

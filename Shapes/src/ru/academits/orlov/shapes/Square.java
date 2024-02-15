@@ -4,8 +4,8 @@ public class Square implements Shape {
     private final double sideLength;
 
     public Square(double sideLength) {
-        if (sideLength < 0) {
-            throw new IllegalArgumentException("Сторона квадрата не должна быть < 0");
+        if (sideLength <= 0) {
+            throw new IllegalArgumentException("Сторона квадрата не должна быть <= 0");
         }
 
         this.sideLength = sideLength;
@@ -41,8 +41,13 @@ public class Square implements Shape {
 
     @Override
     public boolean equals(Object o) {
-        if (o == this) return true;
-        if (o == null || o.getClass() != getClass()) return false;
+        if (o == this) {
+            return true;
+        }
+
+        if (o == null || o.getClass() != getClass()) {
+            return false;
+        }
 
         Square s = (Square) o;
 

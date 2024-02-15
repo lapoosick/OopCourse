@@ -21,29 +21,21 @@ public class Triangle implements Shape {
 
     @Override
     public double getWidth() {
-        return getMaxDouble(x1, x2, x3) - getMinDouble(x1, x2, x3);
+        return getMax(x1, x2, x3) - getMin(x1, x2, x3);
     }
 
     @Override
     public double getHeight() {
-        return getMaxDouble(y1, y2, y3) - getMinDouble(y1, y2, y3);
+        return getMax(y1, y2, y3) - getMin(y1, y2, y3);
     }
 
     @Override
     public double getArea() {
         final double epsilon = 1e-10;
 
-        if (Math.abs((x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3)) <= epsilon) {
-            return 0;
-        } else {
-            double semiPerimeter = (getPerimeter()) / 2;
+        double doubleArea = Math.abs((x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3));
 
-            double aSideLength = getSideLength(x1, y1, x2, y2);
-            double bSideLength = getSideLength(x2, y2, x3, y3);
-            double cSideLength = getSideLength(x1, y1, x3, y3);
-
-            return Math.sqrt(semiPerimeter * (semiPerimeter - aSideLength) * (semiPerimeter - bSideLength) * (semiPerimeter - cSideLength));
-        }
+        return doubleArea <= epsilon ? 0 : doubleArea / 2;
     }
 
     @Override
@@ -55,15 +47,15 @@ public class Triangle implements Shape {
         return aSideLength + bSideLength + cSideLength;
     }
 
-    private double getMaxDouble(double d1, double d2, double d3) {
-        return Math.max(Math.max(d1, d2), d3);
+    private static double getMax(double number1, double number2, double number3) {
+        return Math.max(Math.max(number1, number2), number3);
     }
 
-    private double getMinDouble(double d1, double d2, double d3) {
-        return Math.min(Math.min(d1, d2), d3);
+    private static double getMin(double number1, double number2, double number3) {
+        return Math.min(Math.min(number1, number2), number3);
     }
 
-    private double getSideLength(double x1, double y1, double x2, double y2) {
+    private static double getSideLength(double x1, double y1, double x2, double y2) {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 
@@ -84,8 +76,13 @@ public class Triangle implements Shape {
 
     @Override
     public boolean equals(Object o) {
-        if (o == this) return true;
-        if (o == null || o.getClass() != getClass()) return false;
+        if (o == this) {
+            return true;
+        }
+
+        if (o == null || o.getClass() != getClass()) {
+            return false;
+        }
 
         Triangle t = (Triangle) o;
 
