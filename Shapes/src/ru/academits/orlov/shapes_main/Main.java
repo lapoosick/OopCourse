@@ -12,7 +12,7 @@ public class Main {
                 new Circle(3.14), new Circle(1.3),
                 new Rectangle(3.24, 8.09), new Rectangle(16.3, 0.87),
                 new Square(3.67), new Square(9.08),
-                new Triangle(0, 0, -2.43, 6.7, -4.3, -1.2),
+                new Triangle(0, 0, -2.43, -6.7, 2.43, 6.7),
                 new Triangle(-3.1, -6.3, 0, 1.7, 6.2, -2.6)
         };
 

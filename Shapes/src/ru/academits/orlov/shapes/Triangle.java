@@ -1,6 +1,8 @@
 package ru.academits.orlov.shapes;
 
 public class Triangle implements Shape {
+    private static final double EPSILON = 1e-10;
+
     private final double x1;
     private final double y1;
 
@@ -11,6 +13,10 @@ public class Triangle implements Shape {
     private final double y3;
 
     public Triangle(double x1, double y1, double x2, double y2, double x3, double y3) {
+        if (Math.abs((x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3)) <= EPSILON) {
+            throw new IllegalArgumentException("Точки лежат на одной прямой. Это не треугольник.");
+        }
+
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
@@ -31,11 +37,7 @@ public class Triangle implements Shape {
 
     @Override
     public double getArea() {
-        final double epsilon = 1e-10;
-
-        double doubleArea = Math.abs((x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3));
-
-        return doubleArea <= epsilon ? 0 : doubleArea / 2;
+        return Math.abs((x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3)) / 2;
     }
 
     @Override
