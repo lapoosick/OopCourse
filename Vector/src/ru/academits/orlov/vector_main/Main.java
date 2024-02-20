@@ -22,13 +22,13 @@ public class Main {
         System.out.println("Размерность vector2: " + vector2.getSize());
         System.out.println();
 
-        Vector vector3 = new Vector(new double[]{0.1, 0.2, 0.4, 0.4}, 7);
+        Vector vector3 = new Vector(7, new double[]{0.1, 0.2, 0.4, 0.4, 0.5});
 
         System.out.println("vector3: " + vector3);
         System.out.println("Размерность vector3: " + vector3.getSize());
         System.out.println();
 
-        Vector vector4 = new Vector(new double[]{10, 22, 33, 44, 58}, 3);
+        Vector vector4 = new Vector(3, new double[]{10, 22, 33, 44, 58});
 
         System.out.println("vector4: " + vector4);
         System.out.println("Размерность vector4: " + vector4.getSize());
@@ -70,7 +70,7 @@ public class Main {
 
         System.out.println("Умножение на скаляр:");
         System.out.println(vector4 + " * 2");
-        vector4.multiply(2);
+        vector4.getScalarProduct(2);
         System.out.println("Результат: " + vector4);
         System.out.println();
 
@@ -85,9 +85,9 @@ public class Main {
         System.out.println("Значение по индексу 1: " + vector4.getComponent(1));
         System.out.println();
 
-        System.out.println("Установка значения компоненты 23.6 по индексу 1:");
+        System.out.println("Установка значения компоненты 28 по индексу 1:");
         System.out.println("vector4: " + vector4);
-        vector4.setComponent(28, 1);
+        vector4.setComponent(1, 28);
         System.out.println("Результат: " + vector4);
         System.out.println();
 
@@ -119,8 +119,8 @@ public class Main {
         System.out.println();
 
         System.out.println("Скалярное произведение:");
-        System.out.println(vector1 + " * " + vector2 + " = " + Vector.multiply(vector1, vector2));
-        System.out.println(vector2 + " * " + vector1 + " = " + Vector.multiply(vector2, vector1));
-        System.out.println(vector4 + " * " + vector4 + " = " + Vector.multiply(vector4, vector4));
+        System.out.println(vector1 + " * " + vector2 + " = " + Vector.getScalarProduct(vector1, vector2));
+        System.out.println(vector2 + " * " + vector1 + " = " + Vector.getScalarProduct(vector2, vector1));
+        System.out.println(vector4 + " * " + vector4 + " = " + Vector.getScalarProduct(vector4, vector4));
     }
 }
