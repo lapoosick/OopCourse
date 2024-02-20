@@ -54,11 +54,9 @@ public class Main {
         }
 
         Range[] union = range1.getUnion(range2);
-
         System.out.println("Результат объединения двух интервалов: " + Arrays.toString(union));
 
         Range[] difference = range1.getDifference(range2);
-
         System.out.println("Разность двух интервалов: " + Arrays.toString(difference));
     }
 }
