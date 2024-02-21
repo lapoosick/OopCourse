@@ -34,7 +34,7 @@ public class Square implements Shape {
     @Override
     public String toString() {
         return "Квадрат: " +
-                "длина стороны = " + getWidth() +
+                "длина стороны = " + sideLength +
                 ", площадь = " + getArea() +
                 ", периметр = " + getPerimeter();
     }

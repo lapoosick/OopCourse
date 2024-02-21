@@ -35,7 +35,6 @@ public class Circle implements Shape {
     public String toString() {
         return "Круг: " +
                 "радиус = " + radius +
-                ", диаметр = " + getWidth() +
                 ", площадь = " + getArea() +
                 ", длина окружности = " + getPerimeter();
     }
