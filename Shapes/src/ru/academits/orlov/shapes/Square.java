@@ -5,7 +5,7 @@ public class Square implements Shape {
 
     public Square(double sideLength) {
         if (sideLength <= 0) {
-            throw new IllegalArgumentException("Сторона квадрата не должна быть <= 0");
+            throw new IllegalArgumentException("Сторона квадрата не должна быть <= 0. Передано значение: " + sideLength);
         }
 
         this.sideLength = sideLength;

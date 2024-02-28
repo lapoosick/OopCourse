@@ -6,11 +6,11 @@ public class Rectangle implements Shape {
 
     public Rectangle(double width, double height) {
         if (width <= 0) {
-            throw new IllegalArgumentException("Ширина прямоугольника не должна быть <= 0");
+            throw new IllegalArgumentException("Ширина прямоугольника не должна быть <= 0. Передано значение: " + width);
         }
 
         if (height <= 0) {
-            throw new IllegalArgumentException("Высота прямоугольника не должна быть <= 0");
+            throw new IllegalArgumentException("Высота прямоугольника не должна быть <= 0. Передано значение: " + height);
         }
 
         this.width = width;
