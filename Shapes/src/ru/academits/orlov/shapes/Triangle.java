@@ -42,11 +42,11 @@ public class Triangle implements Shape {
 
     @Override
     public double getPerimeter() {
-        double aSideLength = getSideLength(x1, y1, x2, y2);
-        double bSideLength = getSideLength(x2, y2, x3, y3);
-        double cSideLength = getSideLength(x1, y1, x3, y3);
+        double sideALength = getSideLength(x1, y1, x2, y2);
+        double sideBLength = getSideLength(x2, y2, x3, y3);
+        double sideCLength = getSideLength(x1, y1, x3, y3);
 
-        return aSideLength + bSideLength + cSideLength;
+        return sideALength + sideBLength + sideCLength;
     }
 
     private static double getMax(double number1, double number2, double number3) {
