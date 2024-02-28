@@ -18,12 +18,20 @@ public class Vector {
     }
 
     public Vector(double[] components) {
+        if (components.length == 0) {
+            throw new IllegalArgumentException("Вектор не может иметь размер 0. Передан массив нулевой длины.");
+        }
+
         this.components = Arrays.copyOf(components, components.length);
     }
 
     public Vector(int size, double[] components) {
         if (size <= 0) {
             throw new IllegalArgumentException("Размерность вектора должна быть > 0. Передано значение: " + size);
+        }
+
+        if (components.length == 0) {
+            throw new IllegalArgumentException("Вектор не может иметь размер 0. Передан массив нулевой длины.");
         }
 
         this.components = Arrays.copyOf(components, size);
