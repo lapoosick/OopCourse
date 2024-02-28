@@ -63,14 +63,14 @@ public class Vector {
         }
     }
 
-    public void getScalarProduct(double scalar) {
+    public void multiplyByScalar(double scalar) {
         for (int i = 0; i < components.length; i++) {
             components[i] *= scalar;
         }
     }
 
     public void reverse() {
-        getScalarProduct(-1);
+        multiplyByScalar(-1);
     }
 
     public double getLength() {
@@ -155,7 +155,7 @@ public class Vector {
         return differenceVector;
     }
 
-    public static double getScalarProduct(Vector vector1, Vector vector2) {
+    public static double multiplyByScalar(Vector vector1, Vector vector2) {
         int minVectorSize = Math.min(vector1.components.length, vector2.components.length);
 
         double product = 0;
