@@ -113,32 +113,26 @@ public class Vector {
 
         Vector v = (Vector) o;
 
-        return components.length == v.components.length && Arrays.equals(components, v.components);
+        return Arrays.equals(components, v.components);
     }
 
     @Override
     public int hashCode() {
-        final int prime = 37;
-        int hash = 1;
-
-        hash = prime * hash + Arrays.hashCode(components);
-        hash = prime * hash + components.length;
-
-        return hash;
+        return Arrays.hashCode(components);
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("{");
+        StringBuilder stringBuilder = new StringBuilder("{");
         int lastComponentIndex = components.length - 1;
 
         for (int i = 0; i < lastComponentIndex; i++) {
-            builder.append(components[i]).append(", ");
+            stringBuilder.append(components[i]).append(", ");
         }
 
-        builder.append(components[lastComponentIndex]).append('}');
+        stringBuilder.append(components[lastComponentIndex]).append('}');
 
-        return builder.toString();
+        return stringBuilder.toString();
     }
 
     public static Vector getSum(Vector vector1, Vector vector2) {
