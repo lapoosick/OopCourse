@@ -41,11 +41,6 @@ public class Vector {
         return components.length;
     }
 
-    public static Vector getSum(Vector vector1, Vector vector2) {
-        vector1.add(vector2);
-
-        return vector1;
-    }
 
     public void add(Vector vector) {
         if (components.length < vector.components.length) {
@@ -57,11 +52,6 @@ public class Vector {
         }
     }
 
-    public static Vector getDifference(Vector vector1, Vector vector2) {
-        vector1.subtract(vector2);
-
-        return vector1;
-    }
 
     public void subtract(Vector vector) {
         if (components.length < vector.components.length) {
@@ -73,14 +63,14 @@ public class Vector {
         }
     }
 
-    public void reverse() {
-        getScalarProduct(-1);
-    }
-
     public void getScalarProduct(double scalar) {
         for (int i = 0; i < components.length; i++) {
             components[i] *= scalar;
         }
+    }
+
+    public void reverse() {
+        getScalarProduct(-1);
     }
 
     public double getLength() {
@@ -149,6 +139,18 @@ public class Vector {
         builder.append(components[lastComponentIndex]).append('}');
 
         return builder.toString();
+    }
+
+    public static Vector getSum(Vector vector1, Vector vector2) {
+        vector1.add(vector2);
+
+        return vector1;
+    }
+
+    public static Vector getDifference(Vector vector1, Vector vector2) {
+        vector1.subtract(vector2);
+
+        return vector1;
     }
 
     public static double getScalarProduct(Vector vector1, Vector vector2) {
