@@ -1,5 +1,7 @@
 package ru.academits.orlov.shapes;
 
+import ru.academits.orlov.shapes_exceptions.ThreePointsOnOneLineException;
+
 public class Triangle implements Shape {
     private static final double EPSILON = 1e-10;
 
@@ -14,7 +16,8 @@ public class Triangle implements Shape {
 
     public Triangle(double x1, double y1, double x2, double y2, double x3, double y3) {
         if (Math.abs((x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3)) <= EPSILON) {
-            System.out.println("Точки лежат на одной прямой. Это не треугольник.");
+            throw new ThreePointsOnOneLineException("Точки лежат на одной прямой. Это не треугольник. " +
+                    "Переданы аргументы: x1 = " + x1 + ", y1 = " + y1 + ", x2 = " + x2 + ", y2 = " + y2 + ", x3 = " + x3 + ", y3 = " + y3);
         }
 
         this.x1 = x1;
