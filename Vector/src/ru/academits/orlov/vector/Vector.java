@@ -41,7 +41,6 @@ public class Vector {
         return components.length;
     }
 
-
     public void add(Vector vector) {
         if (components.length < vector.components.length) {
             components = Arrays.copyOf(components, vector.components.length);
@@ -51,7 +50,6 @@ public class Vector {
             components[i] += vector.components[i];
         }
     }
-
 
     public void subtract(Vector vector) {
         if (components.length < vector.components.length) {
