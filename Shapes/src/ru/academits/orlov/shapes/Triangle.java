@@ -14,7 +14,7 @@ public class Triangle implements Shape {
 
     public Triangle(double x1, double y1, double x2, double y2, double x3, double y3) {
         if (Math.abs((x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3)) <= EPSILON) {
-            throw new IllegalArgumentException("Точки лежат на одной прямой. Это не треугольник.");
+            System.out.println("Точки лежат на одной прямой. Это не треугольник.");
         }
 
         this.x1 = x1;
