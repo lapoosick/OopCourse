@@ -85,7 +85,7 @@ public class Vector {
 
     public double getComponent(int index) {
         if (index < 0 || index >= components.length) {
-            throw new ArrayIndexOutOfBoundsException("Индекс " + index + " выходит за пределы размерности вектора. " +
+            throw new IndexOutOfBoundsException("Индекс " + index + " выходит за пределы размерности вектора. " +
                     "Допустимые значения: [0; " + (components.length - 1) + ']');
         }
 
@@ -94,7 +94,7 @@ public class Vector {
 
     public void setComponent(int index, double value) {
         if (index < 0 || index >= components.length) {
-            throw new ArrayIndexOutOfBoundsException("Индекс " + index + " выходит за пределы размерности вектора. " +
+            throw new IndexOutOfBoundsException("Индекс " + index + " выходит за пределы размерности вектора. " +
                     "Допустимые значения: [0; " + (components.length - 1) + ']');
         }
 
