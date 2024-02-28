@@ -142,15 +142,17 @@ public class Vector {
     }
 
     public static Vector getSum(Vector vector1, Vector vector2) {
-        vector1.add(vector2);
+        Vector sumVector = new Vector(vector1);
+        sumVector.add(vector2);
 
-        return vector1;
+        return sumVector;
     }
 
     public static Vector getDifference(Vector vector1, Vector vector2) {
-        vector1.subtract(vector2);
+        Vector differenceVector = new Vector(vector1);
+        differenceVector.subtract(vector2);
 
-        return vector1;
+        return differenceVector;
     }
 
     public static double getScalarProduct(Vector vector1, Vector vector2) {
