@@ -11,6 +11,10 @@ public class Circle implements Shape {
         this.radius = radius;
     }
 
+    public double getRadius() {
+        return radius;
+    }
+
     @Override
     public double getWidth() {
         return radius * 2;

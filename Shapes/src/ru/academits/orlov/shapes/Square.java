@@ -11,6 +11,10 @@ public class Square implements Shape {
         this.sideLength = sideLength;
     }
 
+    public double getSideLength() {
+        return sideLength;
+    }
+
     @Override
     public double getWidth() {
         return sideLength;
