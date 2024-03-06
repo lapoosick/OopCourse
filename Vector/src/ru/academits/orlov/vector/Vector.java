@@ -30,10 +30,6 @@ public class Vector {
             throw new IllegalArgumentException("Размерность вектора должна быть > 0. Передано значение: " + size);
         }
 
-        if (components.length == 0) {
-            throw new IllegalArgumentException("Вектор не может иметь размер 0. Передан массив нулевой длины.");
-        }
-
         this.components = Arrays.copyOf(components, size);
     }
 
@@ -147,7 +143,7 @@ public class Vector {
         return differenceVector;
     }
 
-    public static double multiplyByScalar(Vector vector1, Vector vector2) {
+    public static double getScalarProduct(Vector vector1, Vector vector2) {
         int minVectorSize = Math.min(vector1.components.length, vector2.components.length);
 
         double product = 0;

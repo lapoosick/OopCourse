@@ -119,8 +119,8 @@ public class Main {
         System.out.println();
 
         System.out.println("Скалярное произведение:");
-        System.out.println(vector1 + " * " + vector2 + " = " + Vector.multiplyByScalar(vector1, vector2));
-        System.out.println(vector2 + " * " + vector1 + " = " + Vector.multiplyByScalar(vector2, vector1));
-        System.out.println(vector4 + " * " + vector4 + " = " + Vector.multiplyByScalar(vector4, vector4));
+        System.out.println(vector1 + " * " + vector2 + " = " + Vector.getScalarProduct(vector1, vector2));
+        System.out.println(vector2 + " * " + vector1 + " = " + Vector.getScalarProduct(vector2, vector1));
+        System.out.println(vector4 + " * " + vector4 + " = " + Vector.getScalarProduct(vector4, vector4));
     }
 }
