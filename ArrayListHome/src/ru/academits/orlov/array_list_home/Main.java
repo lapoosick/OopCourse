@@ -1,4 +1,4 @@
-package ru.academits.orlov.arrayListHome;
+package ru.academits.orlov.array_list_home;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
