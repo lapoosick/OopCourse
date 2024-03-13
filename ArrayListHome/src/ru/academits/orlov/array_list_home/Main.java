@@ -1,7 +1,6 @@
 package ru.academits.orlov.array_list_home;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,44 +8,47 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Main {
-    private static final String PATH = "ArrayListHome/src/ru/academits/orlov/arrayListHome/input.csv";
-    private static final ArrayList<Integer> INTEGERS_LIST = new ArrayList<>(Arrays.asList(8, 45, 15, 9898, 34, 2387, 45, 760, 15, 2387, 103, -3, 85, -96, -82, 0));
-
     public static void main(String[] args) {
-        readLinesToList(PATH);
+        String path = "ArrayListHome/src/ru/academits/orlov/array_list_home/input.csv";
+        List<Integer> integersList = new ArrayList<>(Arrays.asList(8, 5, 1, 5, 7, 2));
 
-        System.out.println();
+        try {
+            List<String> lines = readLinesToList(path);
 
-        deleteEvenNumbersFromList(INTEGERS_LIST);
-
-        System.out.println();
-
-        System.out.println("Список целых чисел после удаления дубликатов: " + getUniqueNumbersList(INTEGERS_LIST));
-    }
-
-    private static void readLinesToList(String path) {
-        ArrayList<String> linesList = new ArrayList<>();
-
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
-            while (bufferedReader.ready()) {
-                linesList.add(bufferedReader.readLine());
+            for (String line : lines) {
+                System.out.println(line);
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("Файл " + path + " не найден");
         } catch (IOException e) {
-            System.out.println("Ошибка ввода-вывода");
+            System.out.println("Ошибка ввода-вывода.");
         }
 
-        System.out.println("Строки, прочитанные из файла:");
+        System.out.println();
 
-        for (String line : linesList) {
-            System.out.println(line);
-        }
-    }
-
-    private static void deleteEvenNumbersFromList(List<Integer> integersList) {
         System.out.println("Список целых чисел: " + integersList);
 
+        deleteEvenNumbers(integersList);
+
+        System.out.println("Список целых чисел после удаления чётных чисел: " + integersList);
+
+        System.out.println("Список целых чисел после удаления дубликатов: " + getUniqueNumbersList(integersList));
+    }
+
+    private static List<String> readLinesToList(String path) throws IOException {
+        List<String> linesList = new ArrayList<>();
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
+            String line = bufferedReader.readLine();
+
+            while (line != null) {
+                linesList.add(line);
+                line = bufferedReader.readLine();
+            }
+        }
+
+        return linesList;
+    }
+
+    private static void deleteEvenNumbers(List<Integer> integersList) {
         for (int i = 0; i < integersList.size(); ) {
             if (integersList.get(i) % 2 == 0) {
                 integersList.remove(i);
@@ -54,12 +56,10 @@ public class Main {
                 i++;
             }
         }
-
-        System.out.println("Список целых чисел после удаления чётных чисел: " + integersList);
     }
 
     private static List<Integer> getUniqueNumbersList(List<Integer> integersList) {
-        ArrayList<Integer> uniqueIntegersList = new ArrayList<>(integersList.size());
+        List<Integer> uniqueIntegersList = new ArrayList<>(integersList.size());
 
         for (Integer integer : integersList) {
             if (!uniqueIntegersList.contains(integer)) {
