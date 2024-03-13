@@ -1,6 +1,7 @@
 package ru.academits.orlov.array_list_home;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,21 +16,23 @@ public class Main {
         try {
             List<String> lines = readLinesToList(path);
 
+            System.out.println("Строки из файла: ");
+
             for (String line : lines) {
                 System.out.println(line);
             }
+        } catch (FileNotFoundException e) {
+            System.out.println("Файл со строками не найден.");
         } catch (IOException e) {
-            System.out.println("Ошибка ввода-вывода.");
+            System.out.println("Ошибка при чтении файла со строками.");
         }
 
         System.out.println();
-
         System.out.println("Список целых чисел: " + integersList);
 
         deleteEvenNumbers(integersList);
 
         System.out.println("Список целых чисел после удаления чётных чисел: " + integersList);
-
         System.out.println("Список целых чисел после удаления дубликатов: " + getUniqueNumbersList(integersList));
     }
 
