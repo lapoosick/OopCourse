@@ -11,32 +11,34 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         String path = "ArrayListHome/src/ru/academits/orlov/array_list_home/input.csv";
-        List<Integer> integersList = new ArrayList<>(Arrays.asList(8, 5, 1, 5, 7, 2));
 
         try {
-            List<String> lines = readLinesToList(path);
+            List<String> linesList = getFileLines(path);
 
-            System.out.println("Строки из файла: ");
+            System.out.println("Строки из файла:");
 
-            for (String line : lines) {
+            for (String line : linesList) {
                 System.out.println(line);
             }
         } catch (FileNotFoundException e) {
             System.out.println("Файл со строками не найден.");
         } catch (IOException e) {
-            System.out.println("Ошибка при чтении файла со строками.");
+            System.out.println("Ошибка при чтении файла со строками. " + e);
         }
 
         System.out.println();
+
+        List<Integer> integersList = new ArrayList<>(Arrays.asList(8, 5, 1, 5, 7, 2));
+
         System.out.println("Список целых чисел: " + integersList);
 
         deleteEvenNumbers(integersList);
 
         System.out.println("Список целых чисел после удаления чётных чисел: " + integersList);
-        System.out.println("Список целых чисел после удаления дубликатов: " + getUniqueNumbersList(integersList));
+        System.out.println("Список целых чисел после удаления дубликатов: " + getUniqueElementsList(integersList));
     }
 
-    private static List<String> readLinesToList(String path) throws IOException {
+    private static List<String> getFileLines(String path) throws IOException {
         List<String> linesList = new ArrayList<>();
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
@@ -61,15 +63,15 @@ public class Main {
         }
     }
 
-    private static List<Integer> getUniqueNumbersList(List<Integer> integersList) {
-        List<Integer> uniqueIntegersList = new ArrayList<>(integersList.size());
+    private static <T> List<T> getUniqueElementsList(List<T> elementsList) {
+        List<T> uniqueElementsList = new ArrayList<>(elementsList.size());
 
-        for (Integer integer : integersList) {
-            if (!uniqueIntegersList.contains(integer)) {
-                uniqueIntegersList.add(integer);
+        for (T e : elementsList) {
+            if (!uniqueElementsList.contains(e)) {
+                uniqueElementsList.add(e);
             }
         }
 
-        return uniqueIntegersList;
+        return uniqueElementsList;
     }
 }
