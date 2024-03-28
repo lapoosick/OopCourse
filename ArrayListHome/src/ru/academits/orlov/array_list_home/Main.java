@@ -23,7 +23,7 @@ public class Main {
         } catch (FileNotFoundException e) {
             System.out.println("Файл со строками не найден.");
         } catch (IOException e) {
-            System.out.println("Ошибка при чтении файла со строками. " + e);
+            System.out.println("Ошибка при чтении файла со строками. " + e.getMessage());
         }
 
         System.out.println();
