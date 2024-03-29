@@ -10,9 +10,8 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        String path = "ArrayListHome/src/ru/academits/orlov/array_list_home/input.csv";
-
         try {
+            String path = "ArrayListHome/src/ru/academits/orlov/array_list_home/input.csv";
             List<String> linesList = getFileLines(path);
 
             System.out.println("Строки из файла:");
@@ -35,7 +34,7 @@ public class Main {
         deleteEvenNumbers(integersList);
 
         System.out.println("Список целых чисел после удаления чётных чисел: " + integersList);
-        System.out.println("Список целых чисел после удаления дубликатов: " + getUniqueElementsList(integersList));
+        System.out.println("Список целых чисел без дубликатов: " + getUniqueElementsList(integersList));
     }
 
     private static List<String> getFileLines(String path) throws IOException {
