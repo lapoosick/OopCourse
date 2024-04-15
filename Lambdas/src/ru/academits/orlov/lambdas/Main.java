@@ -1,15 +1,13 @@
 package ru.academits.orlov.lambdas;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
         List<Person> personsList = List.of(
-                new Person("Сергей", 8),
-                new Person("Иван", 4),
+                new Person("Сергей", 88),
+                new Person("Иван", 49),
                 new Person("Антон", 34),
                 new Person("Антон", 28),
                 new Person("Пётр", 20),
@@ -20,7 +18,6 @@ public class Main {
                 .map(Person::getName)
                 .distinct()
                 .toList();
-
         Set<String> uniqueNamesSet = personsList.stream()
                 .map(Person::getName)
                 .collect(Collectors.toSet());
@@ -30,21 +27,22 @@ public class Main {
         System.out.println(uniqueNamesSet.stream().collect(Collectors.joining(", ", "Имена: ", ".")));
 
         // получить список людей младше 18, посчитать для них средний возраст
-        double personsUnder18AverageAge = personsList.stream()
+        OptionalDouble personsUnder18AverageAge = personsList.stream()
                 .filter(person -> person.getAge() < 18)
-                .collect(Collectors.averagingInt(Person::getAge));
+                .mapToInt(Person::getAge)
+                .average();
 
-        System.out.println(personsUnder18AverageAge > 0
-                ? "Средний возраст людей младше 18: " + personsUnder18AverageAge
+        System.out.println(personsUnder18AverageAge.isPresent()
+                ? "Средний возраст людей младше 18: " + personsUnder18AverageAge.getAsDouble()
                 : "В списке нет людей младше 18.");
 
         // при помощи группировки получить Мар, в котором ключи - имена, а значения - средний возраст
-        Map<String, Double> averageAgesByName = personsList.stream()
+        Map<String, Double> averageAgesByNames = personsList.stream()
                 .collect(Collectors.groupingBy(
                         Person::getName,
                         Collectors.averagingInt(Person::getAge)));
 
-        System.out.println("Имена со средним возрастом их обладателей: " + averageAgesByName);
+        System.out.println("Имена со средним возрастом их обладателей: " + averageAgesByNames);
 
         // получить людей, возраст которых от 20 до 45, вывести в консоль их имена в порядке убывания возраста
         personsList.stream()
