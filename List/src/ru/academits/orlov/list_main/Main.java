@@ -1,39 +1,37 @@
 package ru.academits.orlov.list_main;
 
-import ru.academits.orlov.list.ListItem;
 import ru.academits.orlov.list.SinglyLinkedList;
 
 public class Main {
     public static void main(String[] args) {
-        ListItem<String> listItem = new ListItem<>("head");
-        SinglyLinkedList<String> stringsList0 = new SinglyLinkedList<>(listItem);
+        SinglyLinkedList<String> stringsList1 = new SinglyLinkedList<>("head");
 
-        System.out.println("После создания списка stringsList0.getCount() = " + stringsList0.getCount());
+        System.out.println("После создания списка stringsList1.getCount() = " + stringsList1.getCount());
 
-        stringsList0.addFirst("zero");
+        stringsList1.addFirst("zero");
 
-        System.out.println("После добавления элемента stringsList0.getCount() = " + stringsList0.getCount());
-        System.out.println("stringsList0.getHead() = " + stringsList0.getHead());
-        System.out.println("stringsList0.getFirst() = " + stringsList0.getFirst());
-        System.out.println("stringsList0: " + stringsList0);
-        System.out.println("stringsList0.set(1, \"one\") = " + stringsList0.set(1, "one"));
-        System.out.println("stringsList0: " + stringsList0);
+        System.out.println("После добавления элемента stringsList1.getCount() = " + stringsList1.getCount());
+        System.out.println("stringsList1.getFirst() = " + stringsList1.getFirst());
+        System.out.println("stringsList1: " + stringsList1);
+        System.out.println("stringsList1.set(1, \"one\"), старое значение: " + stringsList1.set(1, "one"));
+        System.out.println("stringsList1: " + stringsList1);
 
-        stringsList0.add(2, "two");
+        stringsList1.add(2, "two");
 
-        System.out.println("stringsList0: " + stringsList0);
+        System.out.println("stringsList1: " + stringsList1);
 
-        stringsList0.reverse();
+        stringsList1.reverse();
 
-        System.out.println("reversed stringsList0: " + stringsList0);
-        System.out.println("удаление элемента one: " + stringsList0.remove("one"));
-        System.out.println("удаление элемента five: " + stringsList0.remove("five"));
-        System.out.println("reversed stringsList0 после удаления элемента one: " + stringsList0);
+        System.out.println("reversed stringsList1: " + stringsList1);
+        System.out.println("удаление элемента one: " + stringsList1.remove("one"));
+        System.out.println("удаление элемента five: " + stringsList1.remove("five"));
+        System.out.println("reversed stringsList1 после удаления элемента one: " + stringsList1);
         System.out.println();
 
-        SinglyLinkedList<Integer> integersList = new SinglyLinkedList<>(new ListItem<>(5));
+        SinglyLinkedList<Integer> integersList = new SinglyLinkedList<>(5);
         integersList.add(0, 3);
         integersList.add(2, 8);
+        integersList.add(1, 0);
 
         System.out.println("integersList: " + integersList);
 
@@ -44,21 +42,32 @@ public class Main {
         System.out.println("reversed integersList после удаления элемента 5: " + integersList);
         System.out.println();
 
-        SinglyLinkedList<String> stringsList1 = new SinglyLinkedList<>();
-        stringsList1.addFirst("a");
-        stringsList1.addFirst("b");
-        stringsList1.addFirst("c");
-        stringsList1.addFirst("d");
-        stringsList1.addFirst("e");
+        SinglyLinkedList<String> stringsList2 = new SinglyLinkedList<>();
+        stringsList2.addFirst("a");
+        stringsList2.addFirst("b");
+        stringsList2.addFirst(null);
+        stringsList2.addFirst("d");
+        stringsList2.addFirst("e");
 
-        System.out.println("stringsList1: " + stringsList1);
+        System.out.println("stringsList2: " + stringsList2);
 
-        stringsList1.reverse();
+        stringsList2.reverse();
 
-        System.out.println("reversed stringsList1: " + stringsList1);
-        System.out.println("reversed stringsList1 copy: " + stringsList1.copy());
-        System.out.println("reversed stringsList1.get(2): " + stringsList1.get(2));
-        System.out.println("reversed stringsList1.remove(2): " + stringsList1.remove(2));
-        System.out.println("reversed stringsList1: " + stringsList1);
+        System.out.println("reversed stringsList2: " + stringsList2);
+
+        SinglyLinkedList<String> copy = stringsList2.copy();
+
+        System.out.println("reversed stringsList2 copy: " + copy);
+        System.out.println("reversed stringsList2.get(2): " + stringsList2.get(2));
+        System.out.println("reversed stringsList2.get(1): " + stringsList2.get(1));
+        System.out.println("reversed stringsList2.get(0): " + stringsList2.get(0));
+        System.out.println("reversed stringsList2.remove(null): " + stringsList2.remove(null));
+        System.out.println("reversed stringsList2.remove(\"e\"): " + stringsList2.remove("e"));
+        System.out.println("reversed stringsList2: " + stringsList2);
+        System.out.println("reversed stringsList2.remove(2): " + stringsList2.remove(2));
+        System.out.println("reversed stringsList2: " + stringsList2);
+        System.out.println("reversed stringsList2.removeFirst(): " + stringsList2.removeFirst());
+        System.out.println("reversed stringsList2 после удаления первого элемента: " + stringsList2);
+        System.out.println("reversed stringsList2 copy: " + copy);
     }
 }
