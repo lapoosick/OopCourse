@@ -162,7 +162,7 @@ public class SinglyLinkedList<E> {
 
     private void checkElementIndex(int index, int upperBound) {
         if (index < 0 || index > upperBound) {
-            throw new IndexOutOfBoundsException("Индекс " + index + " выходит за пределы границ допустимых значений индекса (0, " + upperBound + ")");
+            throw new IndexOutOfBoundsException("Индекс " + index + " выходит за пределы границ допустимых значений индекса [0, " + upperBound + "]");
         }
     }
 
