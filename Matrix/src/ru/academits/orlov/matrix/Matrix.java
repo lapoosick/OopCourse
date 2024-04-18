@@ -4,8 +4,6 @@ import ru.academits.orlov.vector.Vector;
 
 import java.util.Arrays;
 
-import static ru.academits.orlov.vector.Vector.getScalarProduct;
-
 public class Matrix {
     private Vector[] rows;
 
@@ -40,10 +38,14 @@ public class Matrix {
 
         rows = new Vector[values.length];
 
-        int maxVectorSize = 1;
+        int maxVectorSize = 0;
 
-        for (double[] value : values) {
-            maxVectorSize = Math.max(maxVectorSize, value.length);
+        for (double[] vector : values) {
+            maxVectorSize = Math.max(maxVectorSize, vector.length);
+        }
+
+        if (maxVectorSize == 0) {
+            throw new IllegalArgumentException("Нельзя создать матрицу из массива векторов, у которых длина = 0.");
         }
 
         for (int i = 0; i < values.length; i++) {
@@ -53,8 +55,9 @@ public class Matrix {
 
     public Matrix(Vector[] vectors) {
         if (vectors.length == 0) {
-            throw new IllegalArgumentException("Нельзя создать матрицу размера 0. Передан массив векторов нулевой длины.");
+            throw new IllegalArgumentException("Нельзя создать матрицу размера 0. Передан массив векторов, у которого длина = 0.");
         }
+
         rows = new Vector[vectors.length];
 
         int maxVectorSize = 1;
@@ -79,7 +82,7 @@ public class Matrix {
 
     public Vector getRow(int index) {
         if (index < 0 || index >= rows.length) {
-            throw new IndexOutOfBoundsException("Допустимые значения для индекса строки: [0; "
+            throw new IndexOutOfBoundsException("Допустимые значения для индекса строки: [0, "
                     + (rows.length - 1) + "]. Передано значение: " + index);
         }
 
@@ -88,7 +91,7 @@ public class Matrix {
 
     public void setRow(int index, Vector vector) {
         if (index < 0 || index >= rows.length) {
-            throw new IndexOutOfBoundsException("Допустимые значения для индекса столбца: [0; "
+            throw new IndexOutOfBoundsException("Допустимые значения для индекса столбца: [0, "
                     + (rows.length - 1) + "]. Передано значение: " + index);
         }
 
@@ -108,7 +111,7 @@ public class Matrix {
         int columnsCount = getColumnsCount();
 
         if (index < 0 || index >= columnsCount) {
-            throw new IndexOutOfBoundsException("Допустимые значения для индекса столбца: [0; "
+            throw new IndexOutOfBoundsException("Допустимые значения для индекса столбца: [0, "
                     + (columnsCount - 1) + "]. Передано значение: " + index);
         }
 
@@ -126,13 +129,7 @@ public class Matrix {
         Vector[] transposedRows = new Vector[transposedRowsCount];
 
         for (int i = 0; i < transposedRowsCount; i++) {
-            Vector transposedRow = new Vector(rows.length);
-
-            for (int j = 0; j < rows.length; j++) {
-                transposedRow.setComponent(j, rows[j].getComponent(i));
-            }
-
-            transposedRows[i] = transposedRow;
+            transposedRows[i] = getColumn(i);
         }
 
         rows = transposedRows;
@@ -153,13 +150,13 @@ public class Matrix {
 
         if (vectorSize != getColumnsCount()) {
             throw new IllegalArgumentException("Невозможно выполнить умножение: количество столбцов в матрице (" + getColumnsCount()
-                    + ") не равно количеству строк в вектор-столбце (" + vectorSize + ").");
+                    + ") не равно количеству строк в векторе-столбце (" + vectorSize + ").");
         }
 
         Vector product = new Vector(rows.length);
 
         for (int i = 0; i < rows.length; i++) {
-            product.setComponent(i, getScalarProduct(rows[i], vector));
+            product.setComponent(i, Vector.getScalarProduct(rows[i], vector));
         }
 
         return product;
@@ -182,19 +179,19 @@ public class Matrix {
 
         Matrix copy = new Matrix(this);
         double determinant = rows[0].getComponent(0);
+        final double EPSILON = 1.0e-10;
+        int lastRowIndex = rows.length - 1;
 
-        for (int i = 0; i < rows.length - 1; i++) {
-            double epsilon = 1.0e-10;
-
+        for (int i = 0; i < lastRowIndex; i++) {
             for (int j = i + 1; j < rows.length; j++) {
-                if (Math.abs(copy.rows[j].getComponent(i)) > epsilon) {
+                if (Math.abs(copy.rows[j].getComponent(i)) > EPSILON) {
                     Vector subtractedRow = copy.getRow(i);
 
-                    if (Math.abs(copy.rows[j].getComponent(i) - 1) > epsilon) {
+                    if (Math.abs(copy.rows[j].getComponent(i) - 1) > EPSILON) {
                         subtractedRow.multiplyByScalar(copy.rows[j].getComponent(i));
                     }
 
-                    if (Math.abs(copy.rows[i].getComponent(i) - 1) > epsilon) {
+                    if (Math.abs(copy.rows[i].getComponent(i) - 1) > EPSILON) {
                         subtractedRow.multiplyByScalar(1 / copy.rows[i].getComponent(i));
                     }
 
@@ -297,7 +294,7 @@ public class Matrix {
             Vector productRow = new Vector(productColumnsCount);
 
             for (int j = 0; j < productColumnsCount; j++) {
-                productRow.setComponent(j, getScalarProduct(matrix1.rows[i], matrix2.getColumn(j)));
+                productRow.setComponent(j, Vector.getScalarProduct(matrix1.rows[i], matrix2.getColumn(j)));
             }
 
             product.setRow(i, productRow);

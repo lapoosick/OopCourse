@@ -16,8 +16,6 @@ public class Main {
         Vector v4 = new Vector(new double[]{3, 1});
 
         Matrix matrix5 = new Matrix(new Vector[]{v1, v2, v3, v4});
-        Matrix matrix51 = new Matrix(new Vector[]{v2, v3});
-        Matrix matrix52 = new Matrix(new Vector[]{v2, v4});
         Matrix matrix6 = new Matrix(new double[][]{{4}, {}, {1}, {2, 3, 0, 1}});
 
         System.out.println("Матрица нулей: " + matrix1);
@@ -26,10 +24,7 @@ public class Main {
         System.out.println("Матрица из двумерного массива: " + matrix4);
         System.out.println("Матрица из массива векторов-строк: " + matrix5);
         matrix5.transpose();
-        System.out.println(matrix51);
-        matrix51.transpose();
-        System.out.println(matrix52);
-        matrix52.transpose();
+        System.out.println("Матрица из массива векторов-строк транспонированная: " + matrix5);
         System.out.println(matrix2 + " equals " + matrix6 + " - " + matrix2.equals(matrix6));
         System.out.println(matrix2 + " equals " + matrix3 + " - " + matrix2.equals(matrix3));
         System.out.println(matrix2 + " equals " + matrix4 + " - " + matrix2.equals(matrix4));
@@ -42,8 +37,7 @@ public class Main {
         System.out.println("Вектор по индексу 2 матрицы " + matrix6 + ": " + matrix6.getRow(2));
         System.out.println("Первый столбец матрицы №6: " + matrix6.getColumn(0));
         System.out.println();
-        System.out.println("matrix2:" + matrix2);
-        System.out.println("Задание вектора " + v2 + " по индексу 0 матрицы №2:");
+        System.out.println("matrix2: " + matrix2);
 
         Vector vector = new Vector(new double[]{1, 2, 3, 4});
         matrix2.setRow(0, vector);
