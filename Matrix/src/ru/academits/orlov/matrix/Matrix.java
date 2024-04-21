@@ -40,12 +40,12 @@ public class Matrix {
 
         int maxVectorSize = 0;
 
-        for (double[] vector : values) {
-            maxVectorSize = Math.max(maxVectorSize, vector.length);
+        for (double[] row : values) {
+            maxVectorSize = Math.max(maxVectorSize, row.length);
         }
 
         if (maxVectorSize == 0) {
-            throw new IllegalArgumentException("Нельзя создать матрицу из массива векторов, у которых длина = 0.");
+            throw new IllegalArgumentException("Нельзя создать матрицу из массивов с нулевой длиной");
         }
 
         for (int i = 0; i < values.length; i++) {
@@ -55,12 +55,12 @@ public class Matrix {
 
     public Matrix(Vector[] vectors) {
         if (vectors.length == 0) {
-            throw new IllegalArgumentException("Нельзя создать матрицу размера 0. Передан массив векторов, у которого длина = 0.");
+            throw new IllegalArgumentException("Нельзя создать матрицу размера 0. Передан массив векторов, у которого размер = 0.");
         }
 
         rows = new Vector[vectors.length];
 
-        int maxVectorSize = 1;
+        int maxVectorSize = 0;
 
         for (Vector vector : vectors) {
             maxVectorSize = Math.max(maxVectorSize, vector.getSize());
@@ -91,7 +91,7 @@ public class Matrix {
 
     public void setRow(int index, Vector vector) {
         if (index < 0 || index >= rows.length) {
-            throw new IndexOutOfBoundsException("Допустимые значения для индекса столбца: [0, "
+            throw new IndexOutOfBoundsException("Допустимые значения для индекса строки: [0, "
                     + (rows.length - 1) + "]. Передано значение: " + index);
         }
 
@@ -125,10 +125,9 @@ public class Matrix {
     }
 
     public void transpose() {
-        int transposedRowsCount = getColumnsCount();
-        Vector[] transposedRows = new Vector[transposedRowsCount];
+        Vector[] transposedRows = new Vector[getColumnsCount()];
 
-        for (int i = 0; i < transposedRowsCount; i++) {
+        for (int i = 0; i < getColumnsCount(); i++) {
             transposedRows[i] = getColumn(i);
         }
 
