@@ -55,7 +55,7 @@ public class Matrix {
 
     public Matrix(Vector[] vectors) {
         if (vectors.length == 0) {
-            throw new IllegalArgumentException("Нельзя создать матрицу размера 0. Передан массив векторов, у которого размер = 0.");
+            throw new IllegalArgumentException("Нельзя создать матрицу размера 0. Передан массив векторов, у которого длина = 0.");
         }
 
         rows = new Vector[vectors.length];
@@ -127,7 +127,7 @@ public class Matrix {
     public void transpose() {
         Vector[] transposedRows = new Vector[getColumnsCount()];
 
-        for (int i = 0; i < getColumnsCount(); i++) {
+        for (int i = 0; i < transposedRows.length; i++) {
             transposedRows[i] = getColumn(i);
         }
 
