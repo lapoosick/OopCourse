@@ -1,6 +1,7 @@
 package ru.academits.orlov.list;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class SinglyLinkedList<E> {
     private ListItem<E> head;
@@ -10,7 +11,7 @@ public class SinglyLinkedList<E> {
     }
 
     public SinglyLinkedList(E data) {
-        this.head = new ListItem<>(data);
+        head = new ListItem<>(data);
         count = 1;
     }
 
@@ -21,9 +22,7 @@ public class SinglyLinkedList<E> {
 
     // получение значения первого элемента
     public E getFirst() {
-        if (head == null) {
-            throw new NoSuchElementException("Первый элемент отсутствует. Список пуст.");
-        }
+        throwIfEmptyList();
 
         return head.getData();
     }
@@ -78,39 +77,25 @@ public class SinglyLinkedList<E> {
             return;
         }
 
-        getItem(index - 1).setNext(new ListItem<>(data, getItem(index)));
+        ListItem<E> previousItem = getItem(index - 1);
+        previousItem.setNext(new ListItem<>(data, previousItem.getNext()));
         count++;
     }
 
     // удаление узла по значению, пусть выдает true, если элемент был удален
     public boolean remove(E data) {
-        if (data == null) {
-            if (head.getData() == null) {
-                unlinkHead();
+        if (Objects.equals(data, head.getData())) {
+            removeHead();
+
+            return true;
+        }
+
+        for (ListItem<E> previousItem = head, currentItem = head.getNext(); currentItem != null; previousItem = previousItem.getNext(), currentItem = currentItem.getNext()) {
+            if (Objects.equals(data, currentItem.getData())) {
+                previousItem.setNext(previousItem.getNext().getNext());
+                count--;
 
                 return true;
-            } else {
-                for (ListItem<E> previousItem = head, currentItem = head.getNext(); currentItem != null; previousItem = previousItem.getNext(), currentItem = currentItem.getNext()) {
-                    if (currentItem.getData() == null) {
-                        removeItem(previousItem);
-
-                        return true;
-                    }
-                }
-            }
-        } else {
-            if (head.getData().equals(data)) {
-                unlinkHead();
-
-                return true;
-            } else {
-                for (ListItem<E> previousItem = head, currentItem = head.getNext(); currentItem != null; previousItem = previousItem.getNext(), currentItem = currentItem.getNext()) {
-                    if (data.equals(currentItem.getData())) {
-                        removeItem(previousItem);
-
-                        return true;
-                    }
-                }
             }
         }
 
@@ -119,12 +104,10 @@ public class SinglyLinkedList<E> {
 
     // удаление первого элемента, пусть выдает значение элемента
     public E removeFirst() {
-        if (head == null) {
-            throw new NoSuchElementException("Список пуст.");
-        }
+        throwIfEmptyList();
 
         E removedData = head.getData();
-        unlinkHead();
+        removeHead();
 
         return removedData;
     }
@@ -151,27 +134,22 @@ public class SinglyLinkedList<E> {
         }
 
         SinglyLinkedList<E> copy = new SinglyLinkedList<>(head.getData());
+        copy.count = count;
 
         for (ListItem<E> sourceItem = head.getNext(), copyItem = copy.head; sourceItem != null; sourceItem = sourceItem.getNext(), copyItem = copyItem.getNext()) {
             copyItem.setNext(new ListItem<>(sourceItem.getData()));
-            copy.count++;
         }
 
         return copy;
     }
 
-    private void checkElementIndex(int index, int upperBound) {
-        if (index < 0 || index > upperBound) {
-            throw new IndexOutOfBoundsException("Индекс " + index + " выходит за пределы границ допустимых значений индекса [0, " + upperBound + "]");
+    private void throwIfEmptyList() {
+        if (head == null) {
+            throw new NoSuchElementException("Список пуст.");
         }
     }
 
-    private void removeItem(ListItem<E> item) {
-        item.setNext(item.getNext().getNext());
-        count--;
-    }
-
-    private void unlinkHead() {
+    private void removeHead() {
         head = head.getNext();
         count--;
     }
@@ -184,6 +162,12 @@ public class SinglyLinkedList<E> {
         }
 
         return item;
+    }
+
+    private static void checkElementIndex(int index, int maxIndex) {
+        if (index < 0 || index > maxIndex) {
+            throw new IndexOutOfBoundsException("Индекс " + index + " выходит за пределы границ допустимых значений индекса [0, " + maxIndex + "]");
+        }
     }
 
     @Override

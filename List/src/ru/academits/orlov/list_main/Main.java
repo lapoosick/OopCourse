@@ -69,5 +69,6 @@ public class Main {
         System.out.println("reversed stringsList2.removeFirst(): " + stringsList2.removeFirst());
         System.out.println("reversed stringsList2 после удаления первого элемента: " + stringsList2);
         System.out.println("reversed stringsList2 copy: " + copy);
+        System.out.println("reversed stringsList2 copy.getCount(): " + copy.getCount());
     }
 }
