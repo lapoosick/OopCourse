@@ -85,14 +85,14 @@ public class SinglyLinkedList<E> {
     // удаление узла по значению, пусть выдает true, если элемент был удален
     public boolean remove(E data) {
         if (Objects.equals(data, head.getData())) {
-            removeHead();
+            removeFirst();
 
             return true;
         }
 
-        for (ListItem<E> previousItem = head, currentItem = head.getNext(); currentItem != null; previousItem = previousItem.getNext(), currentItem = currentItem.getNext()) {
+        for (ListItem<E> currentItem = head.getNext(), previousItem = head; currentItem != null; previousItem = currentItem, currentItem = currentItem.getNext()) {
             if (Objects.equals(data, currentItem.getData())) {
-                previousItem.setNext(previousItem.getNext().getNext());
+                previousItem.setNext(currentItem.getNext());
                 count--;
 
                 return true;
@@ -107,7 +107,8 @@ public class SinglyLinkedList<E> {
         throwIfEmptyList();
 
         E removedData = head.getData();
-        removeHead();
+        head = head.getNext();
+        count--;
 
         return removedData;
     }
@@ -147,11 +148,6 @@ public class SinglyLinkedList<E> {
         if (head == null) {
             throw new NoSuchElementException("Список пуст.");
         }
-    }
-
-    private void removeHead() {
-        head = head.getNext();
-        count--;
     }
 
     private ListItem<E> getItem(int index) {
