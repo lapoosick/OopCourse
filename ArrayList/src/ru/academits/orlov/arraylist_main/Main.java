@@ -95,5 +95,20 @@ public class Main {
         strings.removeAll(strings1);
 
         System.out.println("strings: " + strings);
+
+        CustomArrayList<String> strings2 = new CustomArrayList<>();
+        strings2.add("foo");
+        strings2.add("baz");
+        strings2.add("bar");
+        strings2.add(null);
+
+        System.out.println("stringsCustomArrayList1.hashCode(): " + stringsCustomArrayList1.hashCode());
+        System.out.println("stringsCustomArrayList2.hashCode(): " + stringsCustomArrayList2.hashCode());
+        System.out.println("stringsCustomArrayList3.hashCode(): " + stringsCustomArrayList3.hashCode());
+        System.out.println("strings.hashCode(): " + strings.hashCode());
+        System.out.println("strings1.hashCode(): " + strings1.hashCode());
+        System.out.println("strings2.hashCode(): " + strings2.hashCode());
+        System.out.println("strings1.equals(strings2): " + strings1.equals(strings2));
+        System.out.println("strings1.equals(strings): " + strings1.equals(strings));
     }
 }

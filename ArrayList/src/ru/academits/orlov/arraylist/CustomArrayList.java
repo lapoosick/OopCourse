@@ -221,6 +221,26 @@ public class CustomArrayList<E> implements List<E> {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        CustomArrayList<?> another = (CustomArrayList<?>) o;
+
+        return size == another.size && modCount == another.modCount && Objects.deepEquals(elements, another.elements);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Arrays.hashCode(elements), size, modCount);
+    }
+
+    @Override
     public String toString() {
         if (size == 0) {
             return "[]";
