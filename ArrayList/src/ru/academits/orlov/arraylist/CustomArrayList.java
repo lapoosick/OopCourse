@@ -51,7 +51,7 @@ public class CustomArrayList<E> implements List<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return new MyIterator();
+        return new CustomIterator();
     }
 
     @Override
@@ -335,7 +335,7 @@ public class CustomArrayList<E> implements List<E> {
         }
     }
 
-    private class MyIterator implements Iterator<E> {
+    private class CustomIterator implements Iterator<E> {
         private int currentIndex = -1;
         private final int currentModCount = modCount;
 
