@@ -2,113 +2,133 @@ package ru.academits.orlov.arraylist_main;
 
 import ru.academits.orlov.arraylist.CustomArrayList;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 public class Main {
     public static void main(String[] args) {
-        CustomArrayList<String> stringsCustomArrayList1 = new CustomArrayList<>(5);
+        CustomArrayList<Integer> integersList = new CustomArrayList<>();
+        integersList.add(3);
+        integersList.add(4);
+        integersList.add(2);
+        integersList.add(1);
+        integersList.add(2);
 
-        System.out.println("stringsMyArrayList1.size(): " + stringsCustomArrayList1.size());
-        System.out.println("stringsMyArrayList1: " + stringsCustomArrayList1);
+        Collection<Integer> collection = new ArrayList<>();
+        collection.add(4);
+        collection.add(0);
 
-        stringsCustomArrayList1.add("foo");
+        System.out.println("integersList: " + integersList);
+        System.out.println("collection: " + collection);
 
-        System.out.println("stringsMyArrayList1: " + stringsCustomArrayList1);
-        System.out.println("stringsMyArrayList1.getFirst(): " + stringsCustomArrayList1.getFirst());
+        integersList.removeAll(collection);
 
-        stringsCustomArrayList1.add("bar");
+        System.out.println("integersList после removeAll(collection): " + integersList);
 
-        System.out.println("stringsMyArrayList1: " + stringsCustomArrayList1);
-        System.out.println("stringsMyArrayList1.get(1): " + stringsCustomArrayList1.get(1));
-        System.out.println("stringsMyArrayList1: " + stringsCustomArrayList1);
-        System.out.println("stringsMyArrayList1.contains(null): " + stringsCustomArrayList1.contains(null));
+        collection.add(2);
 
-        stringsCustomArrayList1.trimToSize();
+        System.out.println("collection после добавления двойки: " + collection);
 
-        System.out.println("stringsMyArrayList1: " + stringsCustomArrayList1);
-        System.out.println("stringsMyArrayList1.contains(\"foo\"): " + stringsCustomArrayList1.contains("foo"));
-        System.out.println("stringsMyArrayList1.contains(\"bar\"): " + stringsCustomArrayList1.contains("bar"));
-        System.out.println("stringsMyArrayList1.contains(\"baz\"): " + stringsCustomArrayList1.contains("baz"));
-        System.out.println("stringsMyArrayList1.contains(null): " + stringsCustomArrayList1.contains(null));
-        System.out.println("stringsMyArrayList1: " + stringsCustomArrayList1);
+        integersList.retainAll(collection);
 
-        stringsCustomArrayList1.add(null);
+        System.out.println("integersList после retainAll(collection): " + integersList);
 
-        System.out.println("stringsMyArrayList1: " + stringsCustomArrayList1);
+        integersList.add(3);
+        integersList.add(4);
+        integersList.add(1);
 
-        Object[] objects = stringsCustomArrayList1.toArray();
+        System.out.println("integersList после добавления трёх элементов: " + integersList);
 
-        System.out.println("Arrays.toString(objects): " + Arrays.toString(objects));
+        integersList.set(0, 7);
+        integersList.set(4, 4);
 
-        CustomArrayList<String> stringsCustomArrayList2 = new CustomArrayList<>();
-        stringsCustomArrayList2.add("foo");
-        stringsCustomArrayList2.add("bar");
-        stringsCustomArrayList2.add(null);
+        System.out.println("integersList после изменения элементов: " + integersList);
+        System.out.println("integersList size: " + integersList.size());
+        System.out.println("integersList contains null: " + integersList.contains(null));
+        System.out.println("integersList contains 0: " + integersList.contains(0));
+        System.out.println("integersList contains 3: " + integersList.contains(3));
+        System.out.println("integersList.toArray(): " + Arrays.toString(integersList.toArray()));
 
-        System.out.println("stringsMyArrayList1.containsAll(stringsMyArrayList2): " + stringsCustomArrayList1.containsAll(stringsCustomArrayList2));
+        Number[] numbers = new Number[]{};
 
-        CustomArrayList<String> stringsCustomArrayList3 = new CustomArrayList<>();
-        stringsCustomArrayList3.add("foo");
-        stringsCustomArrayList3.add("baz");
+        System.out.println("integersList.toArray(numbers): " + Arrays.toString(integersList.toArray(numbers)));
 
-        System.out.println("stringsMyArrayList1.containsAll(stringsMyArrayList3): " + stringsCustomArrayList1.containsAll(stringsCustomArrayList3));
+        integersList.remove(4);
+        integersList.remove(0);
 
-        stringsCustomArrayList1.add(1, "baz");
+        System.out.println("integersList после удаления элементов по индексам 0 и 4: " + integersList);
 
-        System.out.println("stringsMyArrayList1: " + stringsCustomArrayList1);
-        System.out.println("stringsMyArrayList1.indexOf(\"baz\"): " + stringsCustomArrayList1.indexOf("baz"));
+        integersList.add(2, 0);
 
-        stringsCustomArrayList1.add("baz");
-        stringsCustomArrayList1.add("buz");
+        System.out.println("integersList после добавления 0 по индексу 2: " + integersList);
 
-        System.out.println("stringsMyArrayList1: " + stringsCustomArrayList1);
-        System.out.println("stringsMyArrayList1.indexOf(\"baz\"): " + stringsCustomArrayList1.indexOf("baz"));
-        System.out.println("stringsMyArrayList1.lastIndexOf(\"baz\"): " + stringsCustomArrayList1.lastIndexOf("baz"));
-        System.out.println("stringsMyArrayList1.lastIndexOf(\"ban\"): " + stringsCustomArrayList1.lastIndexOf("ban"));
-        System.out.println("stringsMyArrayList1: " + stringsCustomArrayList1);
-        System.out.println("stringsMyArrayList2: " + stringsCustomArrayList2);
+        integersList.add(4, 1);
 
-        System.out.println("stringsMyArrayList1.addAll(5, stringsMyArrayList2): " + stringsCustomArrayList1.addAll(5, stringsCustomArrayList2));
-        System.out.println("stringsMyArrayList1.addAll(new MyArrayList<>()): " + stringsCustomArrayList1.addAll(new CustomArrayList<>()));
-        System.out.println("stringsMyArrayList1.addAll(null): " + stringsCustomArrayList1.addAll(null));
-        System.out.println("stringsMyArrayList1: " + stringsCustomArrayList1);
+        System.out.println("integersList после добавления 1 по индексу 4: " + integersList);
 
-        CustomArrayList<String> strings = new CustomArrayList<>();
-        strings.add("foo");
-        strings.add("foo");
-        strings.add("bar");
-        strings.add(null);
-        strings.add("baz");
-        strings.add(null);
-        strings.add("biz");
+        CustomArrayList<CustomArrayList<Integer>> superIntegersList1 = getCustomArrayLists();
+        CustomArrayList<CustomArrayList<Integer>> superIntegersList2 = getCustomArrayLists();
 
-        System.out.println("strings: " + strings);
+        System.out.println("superIntegersList1 equals superIntegersList2: " + superIntegersList1.equals(superIntegersList2));
+        System.out.println("superIntegersList1.hashCode(): " + superIntegersList1.hashCode());
+        System.out.println("superIntegersList2.hashCode(): " + superIntegersList2.hashCode());
 
-        CustomArrayList<String> strings1 = new CustomArrayList<>();
-        strings1.add("foo");
-        strings1.add("baz");
-        strings1.add("bar");
-        strings1.add(null);
+        CustomArrayList<Integer> initialCapacityIntegersList = new CustomArrayList<>(38);
 
-        System.out.println("strings1: " + strings1);
+        System.out.println("initialCapacityIntegersList isEmpty: " + initialCapacityIntegersList.isEmpty());
 
-        strings.removeAll(strings1);
+        initialCapacityIntegersList.add(2);
+        initialCapacityIntegersList.add(1);
+        initialCapacityIntegersList.trimToSize();
 
-        System.out.println("strings: " + strings);
+        System.out.println("initialCapacityIntegersList isEmpty после добавления элементов: " + initialCapacityIntegersList.isEmpty());
+        System.out.println("integersList: " + integersList);
+        System.out.println("initialCapacityIntegersList: " + initialCapacityIntegersList);
+        System.out.println("integersList.containsAll(initialCapacityIntegersList): " + integersList.containsAll(initialCapacityIntegersList));
 
-        CustomArrayList<String> strings2 = new CustomArrayList<>();
-        strings2.add("foo");
-        strings2.add("baz");
-        strings2.add("bar");
-        strings2.add(null);
+        initialCapacityIntegersList.add(9);
 
-        System.out.println("stringsCustomArrayList1.hashCode(): " + stringsCustomArrayList1.hashCode());
-        System.out.println("stringsCustomArrayList2.hashCode(): " + stringsCustomArrayList2.hashCode());
-        System.out.println("stringsCustomArrayList3.hashCode(): " + stringsCustomArrayList3.hashCode());
-        System.out.println("strings.hashCode(): " + strings.hashCode());
-        System.out.println("strings1.hashCode(): " + strings1.hashCode());
-        System.out.println("strings2.hashCode(): " + strings2.hashCode());
-        System.out.println("strings1.equals(strings2): " + strings1.equals(strings2));
-        System.out.println("strings1.equals(strings): " + strings1.equals(strings));
+        System.out.println("integersList.containsAll(initialCapacityIntegersList) после добавления элемента: " + integersList.containsAll(initialCapacityIntegersList));
+
+        integersList.clear();
+
+        System.out.println("Добавление пустой коллекции: " + initialCapacityIntegersList.addAll(integersList));
+        System.out.println("Удаление пустой коллекции: " + initialCapacityIntegersList.removeAll(integersList));
+        System.out.println("integersList после clear(): " + integersList);
+        System.out.println("integersList.containsAll(initialCapacityIntegersList): " + integersList.containsAll(initialCapacityIntegersList));
+
+        integersList.addAll(initialCapacityIntegersList);
+
+        System.out.println("integersList после добавления коллекции: " + integersList);
+
+        integersList.addAll(1, initialCapacityIntegersList);
+
+        System.out.println("integersList после добавления коллекции по индексу 1: " + integersList);
+        System.out.println("integersList.get(1): " + integersList.get(1));
+        System.out.println("integersList.indexOf(9): " + integersList.indexOf(9));
+        System.out.println("integersList.lastIndexOf(9): " + integersList.lastIndexOf(9));
+
+        integersList.retainAll(new ArrayList<Integer>());
+
+        System.out.println("integersList после retainAll пустой коллекции: " + integersList);
+    }
+
+    private static CustomArrayList<CustomArrayList<Integer>> getCustomArrayLists() {
+        CustomArrayList<CustomArrayList<Integer>> superIntegersList = new CustomArrayList<>();
+
+        CustomArrayList<Integer> integersList1 = new CustomArrayList<>();
+        integersList1.add(1);
+        integersList1.add(2);
+        integersList1.add(3);
+        superIntegersList.add(integersList1);
+
+        CustomArrayList<Integer> integersList2 = new CustomArrayList<>();
+        integersList2.add(4);
+        integersList2.add(5);
+        integersList2.add(6);
+        superIntegersList.add(integersList2);
+
+        return superIntegersList;
     }
 }

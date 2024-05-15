@@ -3,13 +3,14 @@ package ru.academits.orlov.arraylist;
 import java.util.*;
 
 public class CustomArrayList<E> implements List<E> {
+    private static final int DEFAULT_CAPACITY = 10;
     private E[] elements;
     private int size;
     private int modCount;
 
     public CustomArrayList() {
         //noinspection unchecked
-        elements = (E[]) new Object[10];
+        elements = (E[]) new Object[DEFAULT_CAPACITY];
     }
 
     public CustomArrayList(int initialCapacity) {
@@ -59,38 +60,36 @@ public class CustomArrayList<E> implements List<E> {
         return Arrays.copyOf(elements, size);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public <T> T[] toArray(T[] a) {
+        if (a == null) {
+            throw new NullPointerException("Передана пустая ссылка на массив.");
+        }
+
         if (a.length < size) {
+            //noinspection unchecked
             return (T[]) Arrays.copyOf(elements, size, a.getClass());
         }
 
-        Object[] objectsArray = toArray();
-        System.arraycopy(elements, 0, objectsArray, 0, size);
+        //noinspection SuspiciousSystemArraycopy
+        System.arraycopy(elements, 0, a, 0, size);
 
-        return (T[]) objectsArray;
+        return a;
     }
 
     @Override
-    public boolean add(E e) {
-        if (size >= elements.length) {
-            increaseCapacity();
-        }
-
-        elements[size] = e;
-        ++size;
-        ++modCount;
+    public boolean add(E element) {
+        add(size, element);
 
         return true;
     }
 
     @Override
     public void add(int index, E element) {
-        checkElementIndex(index, size);
+        checkIndex(index, size);
 
         if (size >= elements.length) {
-            increaseCapacity();
+            elements = Arrays.copyOf(elements, elements.length == 0 ? DEFAULT_CAPACITY : elements.length * 2);
         }
 
         System.arraycopy(elements, index, elements, index + 1, size - index);
@@ -125,12 +124,41 @@ public class CustomArrayList<E> implements List<E> {
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        return addCollection(size, c);
+        return addAll(size, c);
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        return addCollection(index, c);
+        checkIndex(index, size);
+
+        if (c == null) {
+            throw new NullPointerException("Передана пустая ссылка на коллекцию.");
+        }
+
+        if (c.isEmpty()) {
+            return false;
+        }
+
+        int collectionSize = c.size();
+        ensureCapacity(size + collectionSize);
+
+        if (index == size) {
+            for (E element : c) {
+                add(element);
+            }
+        } else {
+            System.arraycopy(elements, index, elements, index + collectionSize, size - index);
+            size += collectionSize;
+
+            for (E element : c) {
+                set(index, element);
+                ++index;
+            }
+        }
+
+        ++modCount;
+
+        return true;
     }
 
     @Override
@@ -145,32 +173,38 @@ public class CustomArrayList<E> implements List<E> {
 
     @Override
     public void clear() {
+        if (size == 0) {
+            return;
+        }
+
+        Arrays.fill(elements, null);
+
         size = 0;
         ++modCount;
     }
 
     @Override
     public E get(int index) {
-        checkElementIndex(index, size - 1);
+        checkIndex(index, size - 1);
 
-        return getElement(index);
+        return elements[index];
     }
 
     @Override
     public E set(int index, E element) {
-        checkElementIndex(index, size);
+        checkIndex(index, size - 1);
 
-        E oldValue = getElement(index);
+        E oldElement = elements[index];
         elements[index] = element;
 
-        return oldValue;
+        return oldElement;
     }
 
     @Override
     public E remove(int index) {
-        checkElementIndex(index, size);
+        checkIndex(index, size - 1);
 
-        E oldValue = getElement(index);
+        E removedElement = elements[index];
 
         if (index < size - 1) {
             System.arraycopy(elements, index + 1, elements, index, size - index - 1);
@@ -180,7 +214,7 @@ public class CustomArrayList<E> implements List<E> {
         --size;
         ++modCount;
 
-        return oldValue;
+        return removedElement;
     }
 
     @Override
@@ -217,7 +251,7 @@ public class CustomArrayList<E> implements List<E> {
 
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
-        return List.of();
+        return null;
     }
 
     @Override
@@ -230,14 +264,14 @@ public class CustomArrayList<E> implements List<E> {
             return false;
         }
 
-        CustomArrayList<?> another = (CustomArrayList<?>) o;
+        CustomArrayList<?> list = (CustomArrayList<?>) o;
 
-        return size == another.size && modCount == another.modCount && Objects.deepEquals(elements, another.elements);
+        return size == list.size && Arrays.equals(elements, list.elements);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(Arrays.hashCode(elements), size, modCount);
+        return Arrays.hashCode(elements);
     }
 
     @Override
@@ -258,69 +292,30 @@ public class CustomArrayList<E> implements List<E> {
         return stringBuilder.toString();
     }
 
-    private E getElement(int index) {
-        return elements[index];
-    }
-
-    private void increaseCapacity() {
-        elements = Arrays.copyOf(elements, elements.length * 2);
-    }
-
-    private boolean addCollection(int index, Collection<? extends E> collection) {
-        if (index != size) {
-            checkElementIndex(index, size);
-        }
-
-        if (collection == null || collection.isEmpty()) {
-            return false;
-        }
-
-        int collectionSize = collection.size();
-        ensureCapacity(size + collectionSize);
-
-        //noinspection unchecked
-        E[] esArray = (E[]) new Object[collectionSize];
-
-        if (index == size) {
-            System.arraycopy(collection.toArray(esArray), 0, elements, size, collectionSize);
-        } else {
-            System.arraycopy(elements, index, elements, index + collectionSize, size - index);
-            System.arraycopy(collection.toArray(esArray), 0, elements, index, collectionSize);
-        }
-
-        size += collectionSize;
-        ++modCount;
-
-        return true;
-    }
-
     private boolean removeElements(Collection<?> c, boolean isRetaining) {
-        if (c == null || c.isEmpty()) {
-            return false;
+        if (c == null) {
+            throw new NullPointerException("Передана пустая ссылка на коллекцию.");
         }
 
-        int currentIndex = 0;
-
-        while (true) {
-            if (currentIndex == size) {
+        if (c.isEmpty()) {
+            if (!isRetaining) {
                 return false;
             }
 
-            if (c.contains(elements[currentIndex]) != isRetaining) {
-                break;
-            }
+            clear();
 
-            ++currentIndex;
+            return true;
         }
 
-        int newSize = currentIndex++;
+        int newSize = 0;
 
-        while (currentIndex < size) {
-            if (c.contains(elements[currentIndex]) == isRetaining) {
-                elements[newSize++] = elements[currentIndex];
+        for (int i = 0; i < size; i++) {
+            if (c.contains(elements[i]) != isRetaining) {
+                continue;
             }
 
-            ++currentIndex;
+            elements[newSize] = elements[i];
+            newSize++;
         }
 
         ++modCount;
@@ -329,7 +324,7 @@ public class CustomArrayList<E> implements List<E> {
         return true;
     }
 
-    private static void checkElementIndex(int index, int maxIndex) {
+    private static void checkIndex(int index, int maxIndex) {
         if (index < 0 || index > maxIndex) {
             throw new IndexOutOfBoundsException("Индекс " + index + " выходит за пределы границ допустимых значений индекса [0, " + maxIndex + "]");
         }
@@ -350,7 +345,7 @@ public class CustomArrayList<E> implements List<E> {
                 throw new ConcurrentModificationException("Список был изменён во время итерирования.");
             }
 
-            if (currentIndex + 1 >= size) {
+            if (!hasNext()) {
                 throw new NoSuchElementException("Список закончился.");
             }
 
