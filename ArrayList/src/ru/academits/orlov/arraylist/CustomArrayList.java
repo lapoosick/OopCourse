@@ -66,7 +66,7 @@ public class CustomArrayList<E> implements List<E> {
             throw new NullPointerException("Передана пустая ссылка на массив.");
         }
 
-        if (a.length <= size) {
+        if (a.length < size) {
             //noinspection unchecked
             return (T[]) Arrays.copyOf(elements, size, a.getClass());
         }
