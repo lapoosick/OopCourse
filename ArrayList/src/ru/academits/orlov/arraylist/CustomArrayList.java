@@ -4,6 +4,7 @@ import java.util.*;
 
 public class CustomArrayList<E> implements List<E> {
     private static final int DEFAULT_CAPACITY = 10;
+
     private E[] elements;
     private int size;
     private int modCount;
@@ -30,8 +31,7 @@ public class CustomArrayList<E> implements List<E> {
 
     public void trimToSize() {
         if (size < elements.length) {
-            //noinspection unchecked
-            elements = (size == 0) ? (E[]) new Object[]{} : Arrays.copyOf(elements, size);
+            elements = Arrays.copyOf(elements, size);
         }
     }
 
@@ -73,6 +73,10 @@ public class CustomArrayList<E> implements List<E> {
 
         //noinspection SuspiciousSystemArraycopy
         System.arraycopy(elements, 0, a, 0, size);
+
+        if (a.length > size) {
+            a[size] = null;
+        }
 
         return a;
     }
@@ -129,8 +133,6 @@ public class CustomArrayList<E> implements List<E> {
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        checkIndex(index, size);
-
         if (c == null) {
             throw new NullPointerException("Передана пустая ссылка на коллекцию.");
         }
@@ -139,23 +141,23 @@ public class CustomArrayList<E> implements List<E> {
             return false;
         }
 
+        checkIndex(index, size);
+
         int collectionSize = c.size();
         ensureCapacity(size + collectionSize);
 
-        if (index == size) {
-            for (E element : c) {
-                add(element);
-            }
-        } else {
+        if (index < size) {
             System.arraycopy(elements, index, elements, index + collectionSize, size - index);
-            size += collectionSize;
-
-            for (E element : c) {
-                set(index, element);
-                ++index;
-            }
         }
 
+        int i = index;
+
+        for (E element : c) {
+            elements[i] = element;
+            ++i;
+        }
+
+        size += collectionSize;
         ++modCount;
 
         return true;
@@ -171,13 +173,51 @@ public class CustomArrayList<E> implements List<E> {
         return removeElements(c, true);
     }
 
+    private boolean removeElements(Collection<?> c, boolean isRetaining) {
+        if (c == null) {
+            throw new NullPointerException("Передана пустая ссылка на коллекцию.");
+        }
+
+        if (size == 0) {
+            return false;
+        }
+
+        if (c.isEmpty()) {
+            if (!isRetaining) {
+                return false;
+            }
+
+            clear();
+
+            return true;
+        }
+
+        int newSize = 0;
+
+        for (int i = 0; i < size; i++) {
+            if (c.contains(elements[i]) != isRetaining) {
+                continue;
+            }
+
+            elements[newSize] = elements[i];
+            newSize++;
+            ++modCount;
+        }
+
+        size = newSize;
+
+        return true;
+    }
+
     @Override
     public void clear() {
         if (size == 0) {
             return;
         }
 
-        Arrays.fill(elements, null);
+        for (int i = 0; i < size; i++) {
+            elements[i] = null;
+        }
 
         size = 0;
         ++modCount;
@@ -266,12 +306,29 @@ public class CustomArrayList<E> implements List<E> {
 
         CustomArrayList<?> list = (CustomArrayList<?>) o;
 
-        return size == list.size && Arrays.equals(elements, list.elements);
+        if (size != list.size) {
+            return false;
+        }
+
+        for (int i = 0; i < size; i++) {
+            if (!elements[i].equals(list.elements[i])) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(elements);
+        final int prime = 37;
+        int hash = 1;
+
+        for (int i = 0; i < size; i++) {
+            hash = prime * hash + (elements[i] != null ? elements[i].hashCode() : 0);
+        }
+
+        return hash;
     }
 
     @Override
@@ -290,38 +347,6 @@ public class CustomArrayList<E> implements List<E> {
         stringBuilder.append(']');
 
         return stringBuilder.toString();
-    }
-
-    private boolean removeElements(Collection<?> c, boolean isRetaining) {
-        if (c == null) {
-            throw new NullPointerException("Передана пустая ссылка на коллекцию.");
-        }
-
-        if (c.isEmpty()) {
-            if (!isRetaining) {
-                return false;
-            }
-
-            clear();
-
-            return true;
-        }
-
-        int newSize = 0;
-
-        for (int i = 0; i < size; i++) {
-            if (c.contains(elements[i]) != isRetaining) {
-                continue;
-            }
-
-            elements[newSize] = elements[i];
-            newSize++;
-        }
-
-        ++modCount;
-        size = newSize;
-
-        return true;
     }
 
     private static void checkIndex(int index, int maxIndex) {
