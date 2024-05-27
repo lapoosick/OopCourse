@@ -3,53 +3,41 @@ package ru.academits.orlov.hashtable;
 import java.util.*;
 
 public class CustomHashTable<E> implements Collection<E> {
-    private static final int DEFAULT_TABLE_LENGTH = 100;
+    private static final int DEFAULT_HASH_TABLE_LENGTH = 100;
 
     private final List<E>[] lists;
+    private int size;
     private int modCount;
 
     public CustomHashTable(int length) {
+        if (length < 1) {
+            throw new IllegalArgumentException("Размер массива хэш-таблицы должен быть больше 0. Передано значение: " + length);
+        }
+
         //noinspection unchecked
         lists = (List<E>[]) new List[length];
     }
 
     public CustomHashTable() {
         //noinspection unchecked
-        lists = (List<E>[]) new List[DEFAULT_TABLE_LENGTH];
+        lists = (List<E>[]) new List[DEFAULT_HASH_TABLE_LENGTH];
     }
 
     @Override
     public int size() {
-        int size = 0;
-
-        for (List<E> list : lists) {
-            if (list != null) {
-                size += list.size();
-            }
-        }
-
         return size;
     }
 
     @Override
     public boolean isEmpty() {
-        return size() == 0;
+        return size == 0;
     }
 
     @Override
     public boolean contains(Object o) {
-        if (isEmpty()) {
-            return false;
-        }
+        int listIndex = getElementHash(o);
 
-        //noinspection unchecked
-        int listIndex = getElementHashcode((E) o);
-
-        if (lists[listIndex] == null) {
-            return false;
-        }
-
-        return lists[listIndex].contains(o);
+        return lists[listIndex] != null && lists[listIndex].contains(o);
     }
 
     @Override
@@ -59,12 +47,9 @@ public class CustomHashTable<E> implements Collection<E> {
 
     @Override
     public Object[] toArray() {
-        Object[] array = new Object[size()];
-        Iterator<E> iterator = iterator();
+        Object[] array = new Object[size];
 
-        for (int i = 0; iterator.hasNext(); i++) {
-            array[i] = iterator.next();
-        }
+        convertToArray(array);
 
         return array;
     }
@@ -75,15 +60,36 @@ public class CustomHashTable<E> implements Collection<E> {
             throw new NullPointerException("Передана пустая ссылка на массив.");
         }
 
-        //noinspection unchecked
-        a = (T[]) toArray();
+        if (a.length < size) {
+            //noinspection unchecked
+            return (T[]) toArray();
+        }
+
+        convertToArray(a);
+
+        if (a.length > size) {
+            a[size] = null;
+        }
 
         return a;
     }
 
+    private void convertToArray(Object[] array) {
+        int i = 0;
+
+        for (List<E> list : lists) {
+            if (list != null) {
+                for (E element : list) {
+                    array[i] = element;
+                    ++i;
+                }
+            }
+        }
+    }
+
     @Override
     public boolean add(E e) {
-        int listIndex = getElementHashcode(e);
+        int listIndex = getElementHash(e);
 
         if (lists[listIndex] == null) {
             lists[listIndex] = new ArrayList<>();
@@ -91,37 +97,31 @@ public class CustomHashTable<E> implements Collection<E> {
 
         lists[listIndex].add(e);
         ++modCount;
+        ++size;
 
         return true;
     }
 
     @Override
     public boolean remove(Object o) {
-        //noinspection unchecked
-        int listIndex = getElementHashcode((E) o);
-        List<E> list = lists[listIndex];
+        List<E> list = lists[getElementHash(o)];
 
-        if (list == null) {
-            return false;
+        if (list != null) {
+            if (list.remove(o)) {
+                ++modCount;
+                --size;
+
+                return true;
+            }
         }
 
-        boolean isRemoved = list.remove(o);
-
-        if (isRemoved) {
-            ++modCount;
-        }
-
-        return isRemoved;
+        return false;
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
         for (Object element : c) {
-            //noinspection unchecked
-            int listIndex = getElementHashcode((E) element);
-
-            //noinspection unchecked
-            if (lists[listIndex] == null || !lists[listIndex].contains((E) element)) {
+            if (!contains(element)) {
                 return false;
             }
         }
@@ -141,19 +141,67 @@ public class CustomHashTable<E> implements Collection<E> {
 
         c.forEach(this::add);
 
-        return false;
+        return true;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        //noinspection unchecked
-        return removeElements((Collection<E>) c, false);
+        if (c == null) {
+            throw new NullPointerException("Передана пустая ссылка на коллекцию.");
+        }
+
+        if (c.isEmpty()) {
+            return false;
+        }
+
+        int initialSize = size;
+
+        for (List<E> list : lists) {
+            if (list != null) {
+                int listSize = list.size();
+                list.removeAll(c);
+                size -= listSize - list.size();
+            }
+        }
+
+        if (initialSize == size) {
+            return false;
+        }
+
+        ++modCount;
+
+        return true;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        //noinspection unchecked
-        return removeElements((Collection<E>) c, true);
+        if (c == null) {
+            throw new NullPointerException("Передана пустая ссылка на коллекцию.");
+        }
+
+        if (c.isEmpty()) {
+            clear();
+
+            return true;
+        }
+
+        int initialSize = size;
+
+        for (List<E> list : lists) {
+            if (list != null) {
+                int listSize = list.size();
+                list.retainAll(c);
+                size -= listSize - list.size();
+            }
+        }
+
+        if (initialSize == size) {
+            return false;
+        }
+
+        ++modCount;
+
+        return true;
     }
 
     @Override
@@ -164,110 +212,81 @@ public class CustomHashTable<E> implements Collection<E> {
 
         for (List<E> list : lists) {
             if (list != null) {
-                list.retainAll(new ArrayList<E>());
+                list.clear();
             }
         }
 
         ++modCount;
+        size = 0;
     }
 
     @Override
     public String toString() {
-        if (isEmpty()) {
+        if (size == 0) {
             return "[]";
         }
 
         StringBuilder stringBuilder = new StringBuilder("[");
-        Iterator<E> iterator = new CustomIterator();
 
-        stringBuilder.append(iterator.next());
-
-        while (iterator.hasNext()) {
-            stringBuilder.append(", ").append(iterator.next());
+        for (List<E> list : lists) {
+            if (list != null) {
+                for (E element : list) {
+                    stringBuilder.append(element).append(", ");
+                }
+            }
         }
 
+        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
         stringBuilder.append(']');
 
         return stringBuilder.toString();
     }
 
-    private int getElementHashcode(E e) {
-        return e == null ? 0 : Math.abs(e.hashCode() % lists.length);
-    }
-
-    private boolean removeElements(Collection<E> c, boolean isRetaining) {
-        if (c == null) {
-            throw new NullPointerException("Передана пустая ссылка на коллекцию.");
-        }
-
-        if (c.isEmpty()) {
-            if (!isRetaining) {
-                return false;
-            }
-
-            clear();
-
-            return true;
-        }
-
-        int initialSize = size();
-
-        for (List<E> list : lists) {
-            if (list != null) {
-                if (isRetaining) {
-                    list.retainAll(c);
-                } else {
-                    list.removeAll(c);
-                }
-            }
-        }
-
-        return initialSize != size();
+    private int getElementHash(Object object) {
+        return object == null ? 0 : Math.abs(object.hashCode() % lists.length);
     }
 
     private class CustomIterator implements Iterator<E> {
         private final int currentModCount = modCount;
-        private final int elementsCount = size();
 
-        private int currentTableIndex = 0;
-        private int currentElementIndex = 0;
-        private int nextElementNumber = 1;
+        private int currentHashTableIndex;
+        private int currentElementIndex;
+        private int nextElementIndex = 0;
 
         @Override
         public boolean hasNext() {
-            return nextElementNumber <= elementsCount;
+            return nextElementIndex < size;
         }
 
         @Override
         public E next() {
             if (currentModCount != modCount) {
-                throw new ConcurrentModificationException("Таблица была изменена во время итерирования.");
+                throw new ConcurrentModificationException("Хэш-таблица была изменена во время итерирования.");
             }
 
             if (!hasNext()) {
-                throw new NoSuchElementException("В таблице больше нет элементов.");
+                throw new NoSuchElementException("В хэш-таблице больше нет элементов.");
             }
 
             while (true) {
-                if (lists[currentTableIndex] == null || lists[currentTableIndex].isEmpty()) {
-                    currentTableIndex++;
+                if (lists[currentHashTableIndex] == null || lists[currentHashTableIndex].isEmpty()) {
+                    currentHashTableIndex++;
                     continue;
                 }
 
-                int lastElementIndex = lists[currentTableIndex].size() - 1;
                 int previousElementIndex = currentElementIndex;
-                int previousTableIndex = currentTableIndex;
+                int previousHashTableIndex = currentHashTableIndex;
 
-                if (currentElementIndex < lastElementIndex) {
+                if (currentElementIndex < lists[currentHashTableIndex].size() - 1) {
                     currentElementIndex++;
                 } else {
                     currentElementIndex = 0;
-                    currentTableIndex++;
+                    currentHashTableIndex++;
                 }
 
-                nextElementNumber++;
+                nextElementIndex++;
 
-                return lists[previousTableIndex].get(previousElementIndex);
+                return lists[previousHashTableIndex].get(previousElementIndex);
             }
         }
     }

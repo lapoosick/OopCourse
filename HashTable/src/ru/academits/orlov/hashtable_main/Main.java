@@ -6,70 +6,72 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-        CustomHashTable<String> defaultSizeTable = new CustomHashTable<>();
-        CustomHashTable<String> customSizeTable = new CustomHashTable<>(5);
+        CustomHashTable<String> defaultSizeHashTable = new CustomHashTable<>();
+        CustomHashTable<String> customSizeHashTable = new CustomHashTable<>(5);
 
-        System.out.println("defaultSizeTable.size(): " + defaultSizeTable.size());
-        System.out.println("customSizeTable.size(): " + customSizeTable.size());
+        System.out.println("defaultSizeHashTable.size(): " + defaultSizeHashTable.size());
+        System.out.println("customSizeHashTable.size(): " + customSizeHashTable.size());
         System.out.println();
-        System.out.println("defaultSizeTable.isEmpty(): " + defaultSizeTable.isEmpty());
-        System.out.println("customSizeTable.isEmpty(): " + customSizeTable.isEmpty());
+        System.out.println("defaultSizeHashTable.isEmpty(): " + defaultSizeHashTable.isEmpty());
+        System.out.println("customSizeHashTable.isEmpty(): " + customSizeHashTable.isEmpty());
         System.out.println();
-        System.out.println("defaultSizeTable.contains(null): " + defaultSizeTable.contains(null));
-        System.out.println("defaultSizeTable.contains(\"foo\"): " + defaultSizeTable.contains("foo"));
+        System.out.println("defaultSizeHashTable.contains(null): " + defaultSizeHashTable.contains(null));
+        System.out.println("defaultSizeHashTable.contains(\"foo\"): " + defaultSizeHashTable.contains("foo"));
         System.out.println();
-        System.out.println("customSizeTable.contains(null): " + customSizeTable.contains(null));
-        System.out.println("customSizeTable.contains(\"foo\"): " + customSizeTable.contains("foo"));
+        System.out.println("customSizeHashTable.contains(null): " + customSizeHashTable.contains(null));
+        System.out.println("customSizeHashTable.contains(\"foo\"): " + customSizeHashTable.contains("foo"));
         System.out.println();
-        System.out.println("defaultSizeTable.add(\"foo\"): " + defaultSizeTable.add("foo"));
-        System.out.println("defaultSizeTable.add(\"foo\"): " + defaultSizeTable.add("foo"));
-        System.out.println("customSizeTable.add(\"foo\"): " + customSizeTable.add("foo"));
-        System.out.println("customSizeTable.add(\"foo\"): " + customSizeTable.add("bar"));
+        System.out.println("defaultSizeHashTable.add(\"foo\"): " + defaultSizeHashTable.add("foo"));
+        System.out.println("defaultSizeHashTable.add(\"foo\"): " + defaultSizeHashTable.add("foo"));
+        System.out.println("customSizeHashTable.add(\"foo\"): " + customSizeHashTable.add("foo"));
+        System.out.println("customSizeHashTable.add(\"foo\"): " + customSizeHashTable.add("bar"));
         System.out.println();
-        System.out.println("defaultSizeTable: " + defaultSizeTable);
-        System.out.println("customSizeTable: " + customSizeTable);
+        System.out.println("defaultSizeHashTable: " + defaultSizeHashTable);
+        System.out.println("customSizeHashTable: " + customSizeHashTable);
         System.out.println();
-        System.out.println("defaultSizeTable.add(null): " + defaultSizeTable.add(null));
-        System.out.println("customSizeTable.add(null): " + customSizeTable.add(null));
+        System.out.println("defaultSizeHashTable.add(null): " + defaultSizeHashTable.add(null));
+        System.out.println("customSizeHashTable.add(null): " + customSizeHashTable.add(null));
         System.out.println();
-        System.out.println("defaultSizeTable: " + defaultSizeTable);
-        System.out.println("customSizeTable: " + customSizeTable);
+        System.out.println("defaultSizeHashTable: " + defaultSizeHashTable);
+        System.out.println("customSizeHashTable: " + customSizeHashTable);
         System.out.println();
-        System.out.println("defaultSizeTable.toArray(): " + Arrays.toString(defaultSizeTable.toArray()));
-        System.out.println("customSizeTable.toArray(): " + Arrays.toString(customSizeTable.toArray()));
-        System.out.println("emptyHashTable.toArray(): " + Arrays.toString(new CustomHashTable<>(0).toArray()));
+        System.out.println("defaultSizeHashTable.toArray(): " + Arrays.toString(defaultSizeHashTable.toArray()));
+        System.out.println("customSizeHashTable.toArray(): " + Arrays.toString(customSizeHashTable.toArray()));
+        System.out.println("emptyHashTable.toArray(): " + Arrays.toString(new CustomHashTable<>(1).toArray()));
         System.out.println();
-        System.out.println("defaultSizeTable.containsAll(customSizeTable): " + defaultSizeTable.containsAll(customSizeTable));
+        System.out.println("defaultSizeHashTable.containsAll(customSizeHashTable): " + defaultSizeHashTable.containsAll(customSizeHashTable));
         System.out.println();
 
-        CustomHashTable<String> customSizeTableCopy = new CustomHashTable<>();
-        customSizeTableCopy.addAll(customSizeTable);
+        CustomHashTable<String> customSizeHashTableCopy = new CustomHashTable<>();
 
-        System.out.println("customSizeTableCopy: " + customSizeTableCopy);
-        System.out.println("customSizeTable: " + customSizeTable);
-        System.out.println("customSizeTableCopy.equals(customSizeTable): " + customSizeTableCopy.equals(customSizeTable));
-        System.out.println("customSizeTable.equals(customSizeTableCopy): " + customSizeTable.equals(customSizeTableCopy));
+        System.out.println("customSizeHashTableCopy.addAll(customSizeHashTable): " + customSizeHashTableCopy.addAll(customSizeHashTable));
+        System.out.println("customSizeHashTableCopy: " + customSizeHashTableCopy);
+        System.out.println("customSizeHashTable: " + customSizeHashTable);
         System.out.println();
-        System.out.println("customSizeTable.hashCode(): " + customSizeTable.hashCode());
-        System.out.println("customSizeTableCopy.hashCode(): " + customSizeTableCopy.hashCode());
+        System.out.println("customSizeHashTable.containsAll(customSizeHashTableCopy): " + customSizeHashTable.containsAll(customSizeHashTableCopy));
         System.out.println();
-        System.out.println("customSizeTable.containsAll(customSizeTableCopy): " + customSizeTable.containsAll(customSizeTableCopy));
+        System.out.println("customSizeHashTable.contains(\"baz\"): " + customSizeHashTable.contains("baz"));
+        System.out.println("customSizeHashTable.contains(\"bar\"): " + customSizeHashTable.contains("bar"));
         System.out.println();
-        System.out.println("customSizeTable.contains(\"baz\"): " + customSizeTable.contains("baz"));
+        System.out.println("defaultSizeHashTable.addAll(customSizeHashTable): " + defaultSizeHashTable.addAll(customSizeHashTable));
+        System.out.println("defaultSizeHashTable.addAll(new CustomHashTable<>(0)): " + defaultSizeHashTable.addAll(new CustomHashTable<>(1)));
+        System.out.println("defaultSizeHashTable: " + defaultSizeHashTable);
         System.out.println();
-        System.out.println("defaultSizeTable.addAll(customSizeTable): " + defaultSizeTable.addAll(customSizeTable));
-        System.out.println("defaultSizeTable.addAll(new CustomHashTable<>(0)): " + defaultSizeTable.addAll(new CustomHashTable<>(0)));
-        System.out.println("defaultSizeTable: " + defaultSizeTable);
+        System.out.println("customSizeHashTable.remove(\"baz\"): " + customSizeHashTable.remove("baz"));
+        System.out.println("customSizeHashTable.remove(\"bar\"): " + customSizeHashTable.remove("bar"));
         System.out.println();
-        System.out.println("customSizeTable.remove(\"baz\"): " + customSizeTable.remove("baz"));
-        System.out.println("customSizeTable.remove(\"bar\"): " + customSizeTable.remove("bar"));
+        System.out.println("customSizeHashTable: " + customSizeHashTable);
         System.out.println();
-        System.out.println("customSizeTable: " + customSizeTable);
-        System.out.println();
-        System.out.println("defaultSizeTable.retainAll(customSizeTable): " + defaultSizeTable.retainAll(customSizeTable));
-        System.out.println("defaultSizeTable: " + defaultSizeTable);
-        System.out.println("defaultSizeTable.removeAll(customSizeTable): " + defaultSizeTable.removeAll(customSizeTable));
-        System.out.println("defaultSizeTable: " + defaultSizeTable);
+        System.out.println("defaultSizeHashTable: " + defaultSizeHashTable);
+        System.out.println("defaultSizeHashTable.retainAll(customSizeHashTable): " + defaultSizeHashTable.retainAll(customSizeHashTable));
+        System.out.println("defaultSizeHashTable.size(): " + defaultSizeHashTable.size());
+        System.out.println("defaultSizeHashTable: " + defaultSizeHashTable);
+        System.out.println("customSizeHashTable: " + customSizeHashTable);
+        System.out.println("defaultSizeHashTable.removeAll(customSizeHashTable): " + defaultSizeHashTable.removeAll(customSizeHashTable));
+        System.out.println("defaultSizeHashTable.size(): " + defaultSizeHashTable.size());
+        System.out.println("defaultSizeHashTable: " + defaultSizeHashTable);
+        System.out.println("defaultSizeHashTable.removeAll(customSizeHashTable): " + defaultSizeHashTable.removeAll(customSizeHashTable));
+        System.out.println("defaultSizeHashTable.retainAll(customSizeHashTable): " + defaultSizeHashTable.retainAll(customSizeHashTable));
         System.out.println();
 
         CustomHashTable<Integer> integers = new CustomHashTable<>();
@@ -80,11 +82,22 @@ public class Main {
         integers.add(2);
 
         Number[] numbers1 = new Number[1];
-        Number[] numbers2 = new Number[100];
+        Number[] numbers2 = {9, 8, 7, 6, 5, 4, 3, 2, 1};
 
         System.out.println("integers: " + integers);
+        System.out.println("numbers1: " + Arrays.toString(numbers1));
+        System.out.println("numbers2: " + Arrays.toString(numbers2));
         System.out.println("integers.toArray(): " + Arrays.toString(integers.toArray()));
         System.out.println("integers.toArray(numbers1): " + Arrays.toString(integers.toArray(numbers1)));
         System.out.println("integers.toArray(numbers2): " + Arrays.toString(integers.toArray(numbers2)));
+        System.out.println();
+        System.out.println("customSizeHashTable: " + customSizeHashTable);
+
+        customSizeHashTable.clear();
+
+        System.out.println("customSizeHashTable после clear(): " + customSizeHashTable);
+        System.out.println("customSizeHashTable.size(): " + customSizeHashTable.size());
+        System.out.println("customSizeHashTable.add(\"foo\"): " + customSizeHashTable.add("foo"));
+        System.out.println("customSizeHashTable: " + customSizeHashTable);
     }
 }
