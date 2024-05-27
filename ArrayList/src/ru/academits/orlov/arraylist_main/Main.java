@@ -16,21 +16,29 @@ public class Main {
         System.out.println("integersList.add(2): " + integersList.add(2));
         System.out.println();
 
-        Collection<Integer> collection = new ArrayList<>();
-        collection.add(4);
-        collection.add(0);
+        Collection<Integer> collection1 = new ArrayList<>();
+        collection1.add(4);
+        collection1.add(0);
+
+        Collection<Integer> collection2 = new ArrayList<>();
+        collection2.add(5);
+        collection2.add(6);
 
         System.out.println("integersList: " + integersList);
-        System.out.println("collection: " + collection);
+        System.out.println("collection1: " + collection1);
         System.out.println();
-        System.out.println("integersList.removeAll(collection): " + integersList.removeAll(collection));
-        System.out.println("integersList после removeAll(collection): " + integersList);
+        System.out.println("integersList.removeAll(collection1): " + integersList.removeAll(collection1));
+        System.out.println("integersList после removeAll(collection1): " + integersList);
         System.out.println();
-        System.out.println("collection.add(2): " + collection.add(2));
-        System.out.println("collection после добавления двойки: " + collection);
+        System.out.println("collection2: " + collection2);
+        System.out.println("integersList.removeAll(collection2): " + integersList.removeAll(collection2));
+        System.out.println("integersList после removeAll(collection2): " + integersList);
         System.out.println();
-        System.out.println("integersList.retainAll(collection): " + integersList.retainAll(collection));
-        System.out.println("integersList после retainAll(collection): " + integersList);
+        System.out.println("collection1.add(2): " + collection1.add(2));
+        System.out.println("collection1 после добавления двойки: " + collection1);
+        System.out.println();
+        System.out.println("integersList.retainAll(collection1): " + integersList.retainAll(collection1));
+        System.out.println("integersList после retainAll(collection1): " + integersList);
         System.out.println();
         System.out.println("integersList.add(3): " + integersList.add(3));
         System.out.println("integersList.add(4): " + integersList.add(4));
@@ -103,6 +111,12 @@ public class Main {
         System.out.println("integersList.addAll(1, initialCapacityIntegersList): " + integersList.addAll(1, initialCapacityIntegersList));
         System.out.println("integersList после добавления коллекции по индексу 1: " + integersList);
         System.out.println();
+        System.out.println("integersList: " + integersList);
+        System.out.println("initialCapacityIntegersList.removeFirst(): " + initialCapacityIntegersList.removeFirst());
+        System.out.println("initialCapacityIntegersList: " + initialCapacityIntegersList);
+        System.out.println("integersList.retainAll(initialCapacityIntegersList): " + integersList.retainAll(initialCapacityIntegersList));
+        System.out.println("integersList: " + integersList);
+        System.out.println();
         System.out.println("integersList.get(1): " + integersList.get(1));
         System.out.println("integersList.indexOf(9): " + integersList.indexOf(9));
         System.out.println("integersList.lastIndexOf(9): " + integersList.lastIndexOf(9));
@@ -112,6 +126,18 @@ public class Main {
         System.out.println("integersList.removeAll(initialCapacityIntegersList): " + integersList.removeAll(initialCapacityIntegersList));
         System.out.println("integersList.retainAll(initialCapacityIntegersList): " + integersList.retainAll(initialCapacityIntegersList));
         System.out.println("integersList: " + integersList);
+
+        CustomArrayList<Integer> integers1 = new CustomArrayList<>();
+        integers1.add(1);
+        integers1.add(null);
+        integers1.add(2);
+
+        CustomArrayList<Integer> integers2 = new CustomArrayList<>();
+        integers2.add(1);
+        integers2.add(null);
+        integers2.add(2);
+
+        System.out.println("integers1.equals(integers2): " + integers1.equals(integers2));
     }
 
     private static CustomArrayList<CustomArrayList<Integer>> getCustomArrayLists() {

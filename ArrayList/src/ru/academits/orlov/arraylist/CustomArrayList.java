@@ -137,11 +137,11 @@ public class CustomArrayList<E> implements List<E> {
             throw new NullPointerException("Передана пустая ссылка на коллекцию.");
         }
 
+        checkIndex(index, size);
+
         if (c.isEmpty()) {
             return false;
         }
-
-        checkIndex(index, size);
 
         int collectionSize = c.size();
         ensureCapacity(size + collectionSize);
@@ -173,6 +173,7 @@ public class CustomArrayList<E> implements List<E> {
         return removeElements(c, true);
     }
 
+    // Returns true if this list changed as a result of the call
     private boolean removeElements(Collection<?> c, boolean isRetaining) {
         if (c == null) {
             throw new NullPointerException("Передана пустая ссылка на коллекцию.");
@@ -201,9 +202,14 @@ public class CustomArrayList<E> implements List<E> {
 
             elements[newSize] = elements[i];
             newSize++;
-            ++modCount;
         }
 
+        if (size == newSize) {
+            return false;
+        }
+
+        Arrays.fill(elements, newSize, size, null);
+        ++modCount;
         size = newSize;
 
         return true;
@@ -215,9 +221,7 @@ public class CustomArrayList<E> implements List<E> {
             return;
         }
 
-        for (int i = 0; i < size; i++) {
-            elements[i] = null;
-        }
+        Arrays.fill(elements, 0, size, null);
 
         size = 0;
         ++modCount;
@@ -311,6 +315,14 @@ public class CustomArrayList<E> implements List<E> {
         }
 
         for (int i = 0; i < size; i++) {
+            if (elements[i] == null) {
+                if (list.elements[i] == null) {
+                    continue;
+                }
+
+                return false;
+            }
+
             if (!elements[i].equals(list.elements[i])) {
                 return false;
             }
