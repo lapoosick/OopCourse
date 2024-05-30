@@ -126,6 +126,7 @@ public class Main {
         System.out.println("integersList.removeAll(initialCapacityIntegersList): " + integersList.removeAll(initialCapacityIntegersList));
         System.out.println("integersList.retainAll(initialCapacityIntegersList): " + integersList.retainAll(initialCapacityIntegersList));
         System.out.println("integersList: " + integersList);
+        System.out.println();
 
         CustomArrayList<Integer> integers1 = new CustomArrayList<>();
         integers1.add(1);
@@ -137,6 +138,12 @@ public class Main {
         integers2.add(null);
         integers2.add(2);
 
+        System.out.println("integers1: " + integers1);
+        System.out.println("integers2: " + integers2);
+        System.out.println("integers1.equals(integers2): " + integers1.equals(integers2));
+        System.out.println("integers2.set(2,5): " + integers2.set(2, 5));
+        System.out.println("integers1: " + integers1);
+        System.out.println("integers2: " + integers2);
         System.out.println("integers1.equals(integers2): " + integers1.equals(integers2));
     }
 
