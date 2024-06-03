@@ -63,7 +63,6 @@ public class Main {
         System.out.println("integersList.remove(4): " + integersList.remove(4));
         System.out.println("integersList.remove(0): " + integersList.remove(0));
         System.out.println("integersList после удаления элементов по индексам 0 и 4: " + integersList);
-        System.out.println();
 
         integersList.add(2, 0);
 
@@ -72,6 +71,7 @@ public class Main {
         integersList.add(4, 1);
 
         System.out.println("integersList после добавления 1 по индексу 4: " + integersList);
+        System.out.println();
 
         CustomArrayList<CustomArrayList<Integer>> superIntegersList1 = getCustomArrayLists();
         CustomArrayList<CustomArrayList<Integer>> superIntegersList2 = getCustomArrayLists();

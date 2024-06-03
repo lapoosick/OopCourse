@@ -315,11 +315,9 @@ public class CustomArrayList<E> implements List<E> {
         }
 
         for (int i = 0; i < size; i++) {
-            if (Objects.equals(elements[i], list.elements[i])) {
-                continue;
+            if (!Objects.equals(elements[i], list.elements[i])) {
+                return false;
             }
-
-            return false;
         }
 
         return true;
