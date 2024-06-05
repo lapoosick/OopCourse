@@ -35,7 +35,7 @@ public class CustomHashTable<E> implements Collection<E> {
 
     @Override
     public boolean contains(Object o) {
-        int listIndex = getHashTableIndex(o);
+        int listIndex = getListIndex(o);
 
         return lists[listIndex] != null && lists[listIndex].contains(o);
     }
@@ -49,7 +49,7 @@ public class CustomHashTable<E> implements Collection<E> {
     public Object[] toArray() {
         Object[] array = new Object[size];
 
-        getAsObjectsArray(array);
+        fillArray(array);
 
         return array;
     }
@@ -65,7 +65,7 @@ public class CustomHashTable<E> implements Collection<E> {
             return Arrays.copyOf(toArray(), size, (Class<? extends T[]>) a.getClass());
         }
 
-        getAsObjectsArray(a);
+        fillArray(a);
 
         if (a.length > size) {
             a[size] = null;
@@ -74,7 +74,7 @@ public class CustomHashTable<E> implements Collection<E> {
         return a;
     }
 
-    private void getAsObjectsArray(Object[] array) {
+    private void fillArray(Object[] array) {
         int i = 0;
 
         for (List<E> list : lists) {
@@ -89,7 +89,7 @@ public class CustomHashTable<E> implements Collection<E> {
 
     @Override
     public boolean add(E e) {
-        int listIndex = getHashTableIndex(e);
+        int listIndex = getListIndex(e);
 
         if (lists[listIndex] == null) {
             lists[listIndex] = new ArrayList<>();
@@ -104,7 +104,7 @@ public class CustomHashTable<E> implements Collection<E> {
 
     @Override
     public boolean remove(Object o) {
-        List<E> list = lists[getHashTableIndex(o)];
+        List<E> list = lists[getListIndex(o)];
 
         if (list != null && list.remove(o)) {
             ++modCount;
@@ -144,12 +144,12 @@ public class CustomHashTable<E> implements Collection<E> {
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        if (isEmpty()) {
-            return false;
-        }
-
         if (c == null) {
             throw new NullPointerException("Передана пустая ссылка на коллекцию.");
+        }
+
+        if (isEmpty()) {
+            return false;
         }
 
         if (c.isEmpty()) {
@@ -177,12 +177,12 @@ public class CustomHashTable<E> implements Collection<E> {
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        if (isEmpty()) {
-            return false;
-        }
-
         if (c == null) {
             throw new NullPointerException("Передана пустая ссылка на коллекцию.");
+        }
+
+        if (isEmpty()) {
+            return false;
         }
 
         if (c.isEmpty()) {
@@ -248,7 +248,7 @@ public class CustomHashTable<E> implements Collection<E> {
         return stringBuilder.toString();
     }
 
-    private int getHashTableIndex(Object object) {
+    private int getListIndex(Object object) {
         return object == null ? 0 : Math.abs(object.hashCode() % lists.length);
     }
 
