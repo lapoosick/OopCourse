@@ -71,7 +71,6 @@ public class Main {
         System.out.println("integers1: " + integers1);
         System.out.println("integers1.remove(8): " + integers1.remove(8));
         System.out.println("integers1: " + integers1);
-
         System.out.println();
 
         BinarySearchTree<Integer> integers2 = new BinarySearchTree<>(6);

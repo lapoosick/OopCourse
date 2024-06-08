@@ -98,6 +98,13 @@ public class BinarySearchTree<E extends Comparable<E>> {
             return false;
         }
 
+        if (elementsCount == 1) {
+            root = null;
+            --elementsCount;
+
+            return true;
+        }
+
         if (element.equals(root.getData())) {
             return removeRoot();
         }
@@ -116,77 +123,68 @@ public class BinarySearchTree<E extends Comparable<E>> {
 
         while (true) {
             if (element.equals(removedNode.getData())) {
-                if (removedNode.getLeftChild() == null) {
-                    if (removedNode.getRightChild() == null) {
-                        if (isRemovedNodeLeftChild) {
-                            removedNodeParent.setLeftChild(null);
-                        } else {
-                            removedNodeParent.setRightChild(null);
-                        }
+                if (removedNode.getLeftChild() == null && removedNode.getRightChild() == null) {
+                    if (isRemovedNodeLeftChild) {
+                        removedNodeParent.setLeftChild(null);
                     } else {
-                        if (isRemovedNodeLeftChild) {
-                            removedNodeParent.setLeftChild(removedNode.getRightChild());
-                        } else {
-                            removedNodeParent.setRightChild(removedNode.getRightChild());
-                        }
+                        removedNodeParent.setRightChild(null);
                     }
-
-                    --elementsCount;
-
-                    return true;
-                }
-
-                if (removedNode.getRightChild() == null) {
+                } else if (removedNode.getLeftChild() == null && removedNode.getRightChild() != null) {
+                    if (isRemovedNodeLeftChild) {
+                        removedNodeParent.setLeftChild(removedNode.getRightChild());
+                    } else {
+                        removedNodeParent.setRightChild(removedNode.getRightChild());
+                    }
+                } else if (removedNode.getLeftChild() != null && removedNode.getRightChild() == null) {
                     if (isRemovedNodeLeftChild) {
                         removedNodeParent.setLeftChild(removedNode.getLeftChild());
                     } else {
                         removedNodeParent.setRightChild(removedNode.getLeftChild());
                     }
+                } else {
+                    TreeNode<E> removedNodeReplaceCandidateParent = removedNode;
+                    TreeNode<E> removedNodeReplaceCandidate = removedNode.getRightChild();
 
-                    --elementsCount;
+                    while (true) {
+                        if (removedNodeReplaceCandidate.getLeftChild() == null) {
+                            if (removedNodeReplaceCandidate.getRightChild() == null) {
+                                removedNodeReplaceCandidate = removedNode.getRightChild();
+                            } else {
+                                removedNodeReplaceCandidate = removedNodeReplaceCandidate.getRightChild();
+                                continue;
+                            }
+                        } else {
+                            while (removedNodeReplaceCandidate.getLeftChild() != null) {
+                                removedNodeReplaceCandidateParent = removedNodeReplaceCandidate;
+                                removedNodeReplaceCandidate = removedNodeReplaceCandidate.getLeftChild();
+                            }
 
-                    return true;
+                            if (removedNodeReplaceCandidate.getRightChild() == null) {
+                                removedNodeReplaceCandidateParent.setLeftChild(null);
+                            } else {
+                                removedNodeReplaceCandidateParent.setLeftChild(removedNodeReplaceCandidate.getRightChild());
+                            }
+
+                            removedNodeReplaceCandidate.setRightChild(removedNode.getRightChild());
+                        }
+
+                        removedNodeReplaceCandidate.setLeftChild(removedNode.getLeftChild());
+
+                        if (isRemovedNodeLeftChild) {
+                            removedNodeParent.setLeftChild(removedNodeReplaceCandidate);
+                        } else {
+                            removedNodeParent.setRightChild(removedNodeReplaceCandidate);
+                        }
+
+                        break;
+                    }
                 }
 
-                TreeNode<E> removedNodeReplaceCandidateParent = removedNode;
-                TreeNode<E> removedNodeReplaceCandidate = removedNode.getRightChild();
+                --elementsCount;
 
-                while (true) {
-                    if (removedNodeReplaceCandidate.getLeftChild() == null) {
-                        if (removedNodeReplaceCandidate.getRightChild() == null) {
-                            removedNodeReplaceCandidate = removedNode.getRightChild();
-                        } else {
-                            removedNodeReplaceCandidate = removedNodeReplaceCandidate.getRightChild();
-                            continue;
-                        }
-                    } else {
-                        while (removedNodeReplaceCandidate.getLeftChild() != null) {
-                            removedNodeReplaceCandidateParent = removedNodeReplaceCandidate;
-                            removedNodeReplaceCandidate = removedNodeReplaceCandidate.getLeftChild();
-                        }
-
-                        if (removedNodeReplaceCandidate.getRightChild() == null) {
-                            removedNodeReplaceCandidateParent.setLeftChild(null);
-                        } else {
-                            removedNodeReplaceCandidateParent.setLeftChild(removedNodeReplaceCandidate.getRightChild());
-                        }
-
-                        removedNodeReplaceCandidate.setRightChild(removedNode.getRightChild());
-                    }
-
-                    removedNodeReplaceCandidate.setLeftChild(removedNode.getLeftChild());
-
-                    if (isRemovedNodeLeftChild) {
-                        removedNodeParent.setLeftChild(removedNodeReplaceCandidate);
-                    } else {
-                        removedNodeParent.setRightChild(removedNodeReplaceCandidate);
-                    }
-
-                    --elementsCount;
-
-                    return true;
-                }
+                return true;
             }
+
 
             if (element.compareTo(removedNode.getData()) < 0) {
                 if (removedNode.getLeftChild() == null) {
@@ -209,25 +207,21 @@ public class BinarySearchTree<E extends Comparable<E>> {
     }
 
     private boolean removeRoot() {
-        if (elementsCount == 1) {
-            root = null;
+        if (root.getLeftChild() == null) {
+            root = root.getRightChild();
         } else {
-            if (root.getLeftChild() == null) {
-                root = root.getRightChild();
+            if (root.getRightChild() == null) {
+                root = root.getLeftChild();
             } else {
-                if (root.getRightChild() == null) {
-                    root = root.getLeftChild();
-                } else {
-                    TreeNode<E> leftChild = root.getLeftChild();
-                    root = root.getRightChild();
-                    TreeNode<E> minLeftNode = root;
+                TreeNode<E> leftChild = root.getLeftChild();
+                root = root.getRightChild();
+                TreeNode<E> minLeftNode = root;
 
-                    while (minLeftNode.getLeftChild() != null) {
-                        minLeftNode = minLeftNode.getLeftChild();
-                    }
-
-                    minLeftNode.setLeftChild(leftChild);
+                while (minLeftNode.getLeftChild() != null) {
+                    minLeftNode = minLeftNode.getLeftChild();
                 }
+
+                minLeftNode.setLeftChild(leftChild);
             }
         }
 
