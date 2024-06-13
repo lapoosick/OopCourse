@@ -95,7 +95,6 @@ public class DesktopView implements View {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = GridBagConstraints.SOUTH;
         pane.add(convertButton, gridBagConstraints);
 
         convertButton.addActionListener(e -> {
