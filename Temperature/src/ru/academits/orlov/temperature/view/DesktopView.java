@@ -30,8 +30,9 @@ public class DesktopView implements View {
         }
 
         frame = new JFrame("Конвертер температур");
-        frame.setSize(350, 150);
+        frame.setSize(350, 200);
         frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         addComponentsToPane(frame.getContentPane());
@@ -49,41 +50,52 @@ public class DesktopView implements View {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.anchor = GridBagConstraints.SOUTH;
+
         pane.add(label, gridBagConstraints);
 
-        JTextField initialValueField = new JTextField(10);
+        JTextField initialValueField = new JTextField(12);
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.anchor = GridBagConstraints.EAST;
         pane.add(initialValueField, gridBagConstraints);
 
         JComboBox<String> initialUnitsComboBox = getTemperatureUnitsComboBox();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = GridBagConstraints.CENTER;
         pane.add(initialUnitsComboBox, gridBagConstraints);
 
         label = new JLabel("Результат");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = GridBagConstraints.CENTER;
+        gridBagConstraints.anchor = GridBagConstraints.SOUTH;
         pane.add(label, gridBagConstraints);
 
-        JTextField resultTextField = new JTextField(10);
+        JTextField resultTextField = new JTextField(12);
         resultTextField.setEditable(false);
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.anchor = GridBagConstraints.EAST;
         pane.add(resultTextField, gridBagConstraints);
 
         JComboBox<String> resultUnitsComboBox = getTemperatureUnitsComboBox();
         resultUnitsComboBox.setSelectedIndex(1);
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.anchor = GridBagConstraints.CENTER;
         pane.add(resultUnitsComboBox, gridBagConstraints);
 
         JButton convertButton = new JButton("Конвертировать");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = GridBagConstraints.SOUTH;
         pane.add(convertButton, gridBagConstraints);
 
         convertButton.addActionListener(e -> {
