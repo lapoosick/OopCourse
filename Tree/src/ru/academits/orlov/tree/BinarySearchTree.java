@@ -1,331 +1,300 @@
 package ru.academits.orlov.tree;
 
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.function.Consumer;
 
-public class BinarySearchTree<E extends Comparable<E>> {
+public class BinarySearchTree<E> {
+    private Comparator<? super E> comparator;
     private TreeNode<E> root;
-    private int elementsCount;
-
-    public BinarySearchTree(E data) {
-        root = new TreeNode<>(data);
-        elementsCount = 1;
-    }
+    private int size;
 
     public BinarySearchTree() {
     }
 
-    public int getElementsCount() {
-        return elementsCount;
+    public BinarySearchTree(Comparator<? super E> comparator) {
+        this.comparator = comparator;
     }
 
-    public boolean insert(E element) {
-        if (element == null) {
-            throw new IllegalArgumentException("Передана пустая ссылка. Бинарное дерево поиска не поддерживает null.");
-        }
+    public int getSize() {
+        return size;
+    }
 
-        if (elementsCount == 0) {
-            root = new TreeNode<>(element);
-            ++elementsCount;
+    public void insert(E element) {
+        TreeNode<E> newNode = new TreeNode<>(element);
 
-            return true;
-        }
+        if (size == 0) {
+            root = newNode;
+        } else {
+            //noinspection unchecked
+            Comparable<E> comparableElement = (Comparable<E>) element;
+            TreeNode<E> currentNode = root;
 
-        TreeNode<E> currentNode = root;
-
-        while (true) {
-            if (element.compareTo(currentNode.getData()) < 0) {
-                if (currentNode.getLeftChild() != null) {
-                    currentNode = currentNode.getLeftChild();
+            while (true) {
+                if (currentNode.getData() == null
+                        || comparator != null && comparator.compare(element, currentNode.getData()) >= 0
+                        || element != null && comparableElement.compareTo(currentNode.getData()) >= 0) {
+                    if (currentNode.getRightChild() != null) {
+                        currentNode = currentNode.getRightChild();
+                    } else {
+                        currentNode.setRightChild(newNode);
+                        break;
+                    }
                 } else {
-                    currentNode.setLeftChild(new TreeNode<>(element));
-                    ++elementsCount;
-
-                    return true;
-                }
-            } else {
-                if (currentNode.getRightChild() != null) {
-                    currentNode = currentNode.getRightChild();
-                } else {
-                    currentNode.setRightChild(new TreeNode<>(element));
-                    ++elementsCount;
-
-                    return true;
+                    if (currentNode.getLeftChild() != null) {
+                        currentNode = currentNode.getLeftChild();
+                    } else {
+                        currentNode.setLeftChild(newNode);
+                        break;
+                    }
                 }
             }
         }
+
+        ++size;
     }
 
     public boolean contains(E element) {
-        if (element == null) {
-            throw new IllegalArgumentException("Передана пустая ссылка. Бинарное дерево поиска не поддерживает null.");
-        }
-
-        if (elementsCount == 0) {
+        if (size == 0) {
             return false;
         }
 
         TreeNode<E> currentNode = root;
 
-        while (true) {
-            if (element.equals(currentNode.getData())) {
-                return true;
-            }
-
-            if (element.compareTo(currentNode.getData()) < 0) {
-                if (currentNode.getLeftChild() == null) {
+        if (element == null) {
+            while (true) {
+                if (currentNode == null) {
                     return false;
+                }
+
+                if (currentNode.getData() == null) {
+                    return true;
                 }
 
                 currentNode = currentNode.getLeftChild();
-            } else {
-                if (currentNode.getRightChild() == null) {
-                    return false;
-                }
+            }
+        } else {
+            //noinspection unchecked
+            Comparable<E> comparableElement = (Comparable<E>) element;
 
-                currentNode = currentNode.getRightChild();
+            while (true) {
+                if (currentNode.getData() == null
+                        || comparator != null && comparator.compare(element, currentNode.getData()) > 0
+                        || currentNode.getData() != null && comparableElement.compareTo(currentNode.getData()) > 0) {
+
+                    if (currentNode.getRightChild() == null) {
+                        return false;
+                    }
+
+                    currentNode = currentNode.getRightChild();
+                } else if (comparator != null && comparator.compare(element, currentNode.getData()) < 0
+                        || comparableElement.compareTo(currentNode.getData()) < 0) {
+                    if (currentNode.getLeftChild() == null) {
+                        return false;
+                    }
+
+                    currentNode = currentNode.getLeftChild();
+                } else {
+                    return true;
+                }
             }
         }
     }
 
     public boolean remove(E element) {
-        if (element == null) {
-            throw new IllegalArgumentException("Передана пустая ссылка. Бинарное дерево поиска не поддерживает null.");
-        }
-
-        if (elementsCount == 0) {
+        if (size == 0) {
             return false;
         }
 
-        if (elementsCount == 1) {
-            root = null;
-            --elementsCount;
+        TreeNode<E> removedNodeParent = null;
+        TreeNode<E> removedNode = root;
+        boolean isLeftChild = true;
 
-            return true;
-        }
+        if (element == null) {
+            while (true) {
+                if (removedNode == null) {
+                    return false;
+                }
 
-        if (element.equals(root.getData())) {
-            return removeRoot();
-        }
-
-        TreeNode<E> removedNodeParent = root;
-        TreeNode<E> removedNode;
-        boolean isRemovedNodeLeftChild;
-
-        if (element.compareTo(root.getData()) < 0) {
-            removedNode = root.getLeftChild();
-            isRemovedNodeLeftChild = true;
-        } else {
-            removedNode = root.getRightChild();
-            isRemovedNodeLeftChild = false;
-        }
-
-        while (true) {
-            if (element.equals(removedNode.getData())) {
-                if (removedNode.getLeftChild() == null && removedNode.getRightChild() == null) {
-                    if (isRemovedNodeLeftChild) {
-                        removedNodeParent.setLeftChild(null);
-                    } else {
-                        removedNodeParent.setRightChild(null);
-                    }
-                } else if (removedNode.getLeftChild() == null && removedNode.getRightChild() != null) {
-                    if (isRemovedNodeLeftChild) {
-                        removedNodeParent.setLeftChild(removedNode.getRightChild());
-                    } else {
-                        removedNodeParent.setRightChild(removedNode.getRightChild());
-                    }
-                } else if (removedNode.getLeftChild() != null && removedNode.getRightChild() == null) {
-                    if (isRemovedNodeLeftChild) {
-                        removedNodeParent.setLeftChild(removedNode.getLeftChild());
-                    } else {
-                        removedNodeParent.setRightChild(removedNode.getLeftChild());
-                    }
+                if (removedNode.getData() == null) {
+                    break;
                 } else {
-                    TreeNode<E> removedNodeReplaceCandidateParent = removedNode;
-                    TreeNode<E> removedNodeReplaceCandidate = removedNode.getRightChild();
+                    removedNodeParent = removedNode;
+                    removedNode = removedNode.getLeftChild();
+                }
+            }
+        } else {
+            while (true) {
+                if (removedNode == null) {
+                    return false;
+                }
 
-                    while (true) {
-                        if (removedNodeReplaceCandidate.getLeftChild() == null) {
-                            if (removedNodeReplaceCandidate.getRightChild() == null) {
-                                removedNodeReplaceCandidate = removedNode.getRightChild();
-                            } else {
-                                removedNodeReplaceCandidate = removedNodeReplaceCandidate.getRightChild();
-                                continue;
-                            }
-                        } else {
-                            while (removedNodeReplaceCandidate.getLeftChild() != null) {
-                                removedNodeReplaceCandidateParent = removedNodeReplaceCandidate;
-                                removedNodeReplaceCandidate = removedNodeReplaceCandidate.getLeftChild();
-                            }
+                if (removedNode.getData() == null) {
+                    if (removedNode.getRightChild() == null) {
+                        return false;
+                    }
 
-                            if (removedNodeReplaceCandidate.getRightChild() == null) {
-                                removedNodeReplaceCandidateParent.setLeftChild(null);
-                            } else {
-                                removedNodeReplaceCandidateParent.setLeftChild(removedNodeReplaceCandidate.getRightChild());
-                            }
+                    removedNodeParent = removedNode;
+                    removedNode = removedNode.getRightChild();
+                    isLeftChild = false;
+                } else {
+                    //noinspection unchecked
+                    Comparable<E> comparableElement = (Comparable<E>) element;
 
-                            removedNodeReplaceCandidate.setRightChild(removedNode.getRightChild());
-                        }
-
-                        removedNodeReplaceCandidate.setLeftChild(removedNode.getLeftChild());
-
-                        if (isRemovedNodeLeftChild) {
-                            removedNodeParent.setLeftChild(removedNodeReplaceCandidate);
-                        } else {
-                            removedNodeParent.setRightChild(removedNodeReplaceCandidate);
-                        }
-
+                    if (comparator != null && comparator.compare(element, removedNode.getData()) == 0
+                            || comparableElement.compareTo(removedNode.getData()) == 0) {
                         break;
                     }
+
+                    removedNodeParent = removedNode;
+
+                    if (comparator != null && comparator.compare(element, removedNode.getData()) < 0
+                            || comparableElement.compareTo(removedNode.getData()) < 0) {
+                        removedNode = removedNode.getLeftChild();
+                        isLeftChild = true;
+                    } else {
+                        removedNode = removedNode.getRightChild();
+                        isLeftChild = false;
+                    }
                 }
-
-                --elementsCount;
-
-                return true;
-            }
-
-
-            if (element.compareTo(removedNode.getData()) < 0) {
-                if (removedNode.getLeftChild() == null) {
-                    return false;
-                }
-
-                removedNodeParent = removedNode;
-                removedNode = removedNode.getLeftChild();
-                isRemovedNodeLeftChild = true;
-            } else {
-                if (removedNode.getRightChild() == null) {
-                    return false;
-                }
-
-                removedNodeParent = removedNode;
-                removedNode = removedNode.getRightChild();
-                isRemovedNodeLeftChild = false;
             }
         }
-    }
 
-    private boolean removeRoot() {
-        if (root.getLeftChild() == null) {
-            root = root.getRightChild();
+        boolean hasLeftChild = removedNode.getLeftChild() != null;
+        boolean hasRightChild = removedNode.getRightChild() != null;
+        TreeNode<E> replacementNode = null;
+        TreeNode<E> minLeftNode = removedNode.getRightChild();
+
+        if (hasLeftChild && hasRightChild) {
+            TreeNode<E> minLeftNodeParent = removedNode;
+
+            while (minLeftNode.getLeftChild() != null) {
+                minLeftNodeParent = minLeftNode;
+                minLeftNode = minLeftNode.getLeftChild();
+            }
+
+            if (minLeftNodeParent == removedNode) {
+                minLeftNodeParent.setRightChild(minLeftNode.getRightChild());
+            } else {
+                minLeftNodeParent.setLeftChild(minLeftNode.getRightChild());
+            }
+
+            minLeftNode.setLeftChild(removedNode.getLeftChild());
+            minLeftNode.setRightChild(removedNode.getRightChild());
+
+            if (removedNodeParent == null) {
+                root = minLeftNode;
+            } else {
+                replacementNode = minLeftNode;
+            }
         } else {
-            if (root.getRightChild() == null) {
-                root = root.getLeftChild();
-            } else {
-                TreeNode<E> leftChild = root.getLeftChild();
-                root = root.getRightChild();
-                TreeNode<E> minLeftNode = root;
+            if (hasLeftChild) {
+                replacementNode = removedNode.getLeftChild();
+            } else if (hasRightChild) {
+                replacementNode = removedNode.getRightChild();
+            }
 
-                while (minLeftNode.getLeftChild() != null) {
-                    minLeftNode = minLeftNode.getLeftChild();
-                }
-
-                minLeftNode.setLeftChild(leftChild);
+            if (removedNodeParent == null) {
+                root = replacementNode;
             }
         }
 
-        --elementsCount;
+        if (removedNodeParent != null) {
+            if (isLeftChild) {
+                removedNodeParent.setLeftChild(replacementNode);
+            } else {
+                removedNodeParent.setRightChild(replacementNode);
+            }
+        }
+
+        --size;
 
         return true;
     }
 
-    public void traverseBreadth() {
-        if (elementsCount == 0) {
-            System.out.println("[]");
-        } else {
-            System.out.println(getAsString());
-        }
-    }
+    public void traverseBreadth(Consumer<E> consumer) {
+        if (size > 0) {
+            Queue<TreeNode<E>> queue = new LinkedList<>();
+            queue.add(root);
 
-    public void traverseDepth() {
-        if (elementsCount == 0) {
-            System.out.println("[]");
+            while (!queue.isEmpty()) {
+                TreeNode<E> currentNode = queue.remove();
 
-            return;
-        }
+                consumer.accept(currentNode.getData());
 
-        StringBuilder stringBuilder = new StringBuilder("[");
-        Deque<TreeNode<E>> nodes = new LinkedList<>();
+                if (currentNode.getLeftChild() != null) {
+                    queue.add(currentNode.getLeftChild());
+                }
 
-        nodes.push(root);
-
-        while (!nodes.isEmpty()) {
-            TreeNode<E> currentNode = nodes.pop();
-
-            stringBuilder.append(currentNode.getData()).append(", ");
-
-            if (currentNode.getRightChild() != null) {
-                nodes.push(currentNode.getRightChild());
-            }
-
-            if (currentNode.getLeftChild() != null) {
-                nodes.push(currentNode.getLeftChild());
+                if (currentNode.getRightChild() != null) {
+                    queue.add(currentNode.getRightChild());
+                }
             }
         }
-
-        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
-        stringBuilder.append(']');
-
-        System.out.println(stringBuilder);
     }
 
-    public void traverseDepthRecursive() {
-        if (elementsCount == 0) {
-            System.out.println("[]");
+    public void traverseDepth(Consumer<E> consumer) {
+        if (size > 0) {
+            Deque<TreeNode<E>> deque = new LinkedList<>();
+            deque.push(root);
 
-            return;
+            while (!deque.isEmpty()) {
+                TreeNode<E> currentNode = deque.pop();
+
+                consumer.accept(currentNode.getData());
+
+                if (currentNode.getRightChild() != null) {
+                    deque.push(currentNode.getRightChild());
+                }
+
+                if (currentNode.getLeftChild() != null) {
+                    deque.push(currentNode.getLeftChild());
+                }
+            }
         }
-
-        StringBuilder stringBuilder = new StringBuilder("[");
-
-        visit(root, stringBuilder);
-
-        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
-        stringBuilder.append(']');
-
-        System.out.println(stringBuilder);
     }
 
-    private void visit(TreeNode<E> node, StringBuilder stringBuilder) {
+    public void traverseDepthRecursive(Consumer<E> consumer) {
+        traverseDepthRecursive(root, consumer);
+    }
+
+    private void traverseDepthRecursive(TreeNode<E> node, Consumer<E> consumer) {
         if (node != null) {
-            stringBuilder.append(node.getData()).append(", ");
+            consumer.accept(node.getData());
 
-            visit(node.getLeftChild(), stringBuilder);
-            visit(node.getRightChild(), stringBuilder);
+            traverseDepthRecursive(node.getLeftChild(), consumer);
+            traverseDepthRecursive(node.getRightChild(), consumer);
         }
     }
 
     @Override
     public String toString() {
-        if (elementsCount == 0) {
+        if (size == 0) {
             return "[]";
         }
 
-        if (elementsCount == 1) {
+        if (size == 1) {
             return "[" + root.getData() + ']';
         }
 
-        return getAsString();
-    }
-
-    private String getAsString() {
         StringBuilder stringBuilder = new StringBuilder("[");
-        Queue<TreeNode<E>> nodes = new LinkedList<>();
+        Queue<TreeNode<E>> queue = new LinkedList<>();
 
-        nodes.add(root);
+        queue.add(root);
 
-        while (!nodes.isEmpty()) {
-            TreeNode<E> currentNode = nodes.remove();
+        while (!queue.isEmpty()) {
+            TreeNode<E> currentNode = queue.remove();
 
             stringBuilder.append(currentNode.getData()).append(", ");
 
             if (currentNode.getLeftChild() != null) {
-                nodes.add(currentNode.getLeftChild());
+                queue.add(currentNode.getLeftChild());
             }
 
             if (currentNode.getRightChild() != null) {
-                nodes.add(currentNode.getRightChild());
+                queue.add(currentNode.getRightChild());
             }
         }
 
