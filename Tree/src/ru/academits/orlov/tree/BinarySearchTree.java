@@ -83,7 +83,6 @@ public class BinarySearchTree<E> {
                 if (currentNode.getData() == null
                         || comparator != null && comparator.compare(element, currentNode.getData()) > 0
                         || currentNode.getData() != null && comparableElement.compareTo(currentNode.getData()) > 0) {
-
                     if (currentNode.getRightChild() == null) {
                         return false;
                     }
